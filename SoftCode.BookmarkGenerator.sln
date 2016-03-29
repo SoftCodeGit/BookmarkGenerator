@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FF5969A0-D995-44A9-8D64-D9A51946ECC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA5F4D12-D8C5-45D6-9757-3C04EC073626}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SoftCode.BookmarkGenerator.UI", "src\SoftCode.BookmarkGenerator.UI\SoftCode.BookmarkGenerator.UI.xproj", "{0748C89E-3F95-42E9-A52C-367F3863FBA8}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SoftCode.BookmarkGenerator.Common", "src\SoftCode.BookmarkGenerator.Common\SoftCode.BookmarkGenerator.Common.xproj", "{CE8213E1-6213-413F-BB92-F46355EAF5E1}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Softcore.BookmarkGenerator.API", "src\Softcore.BookmarkGenerator.API\Softcore.BookmarkGenerator.API.xproj", "{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftCode.BookmarkGenerator.API.Tests", "SoftCode.BookmarkGenerator.API.Tests\SoftCode.BookmarkGenerator.API.Tests.csproj", "{7019ADF6-5F76-40D8-9D42-6FFFC38BDDB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0748C89E-3F95-42E9-A52C-367F3863FBA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0748C89E-3F95-42E9-A52C-367F3863FBA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0748C89E-3F95-42E9-A52C-367F3863FBA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0748C89E-3F95-42E9-A52C-367F3863FBA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8213E1-6213-413F-BB92-F46355EAF5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8213E1-6213-413F-BB92-F46355EAF5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8213E1-6213-413F-BB92-F46355EAF5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8213E1-6213-413F-BB92-F46355EAF5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7019ADF6-5F76-40D8-9D42-6FFFC38BDDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7019ADF6-5F76-40D8-9D42-6FFFC38BDDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7019ADF6-5F76-40D8-9D42-6FFFC38BDDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7019ADF6-5F76-40D8-9D42-6FFFC38BDDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0748C89E-3F95-42E9-A52C-367F3863FBA8} = {FF5969A0-D995-44A9-8D64-D9A51946ECC6}
+		{CE8213E1-6213-413F-BB92-F46355EAF5E1} = {FF5969A0-D995-44A9-8D64-D9A51946ECC6}
+		{A51A8EA2-30B3-4D0A-B1A5-82BDDD08CBF8} = {FF5969A0-D995-44A9-8D64-D9A51946ECC6}
+	EndGlobalSection
+EndGlobal
