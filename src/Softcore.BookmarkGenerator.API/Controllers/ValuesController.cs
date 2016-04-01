@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 
-namespace Softcore.BookmarkGenerator.API.Controllers
+namespace SoftCode.BookmarkGenerator.API.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

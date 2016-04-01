@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Serilog;
+using Serilog.Sinks.RollingFile;
+using SoftCode.BookmarkGenerator.Common.Helpers;
 using SoftCode.BookmarkGenerator.Common.Repository;
+using System.Diagnostics;
+using System.IO;
 
-namespace Softcore.BookmarkGenerator.API
+namespace SoftCode.BookmarkGenerator.API
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
@@ -27,6 +30,13 @@ namespace Softcore.BookmarkGenerator.API
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build().ReloadOnChanged("appsettings.json");
+
+            // TO-DO, move stuff to appsettings.json
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                //.MinimumLevel.Error()
+                //.WriteTo.RollingFile(Path.Combine(appEnv.ApplicationBasePath, "log-{Date}.txt"))
+                .CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -39,17 +49,48 @@ namespace Softcore.BookmarkGenerator.API
 
             services.AddMvc();
 
+            // Doc says to add Options service in startup, but it appears to work without
+            //services.AddOptions();
+            
             // Adding IBookmarkRepository DI
-            services.AddTransient<IBookmarkRepository, BookmarkRepository>();
+            services.AddScoped<IBookmarkRepository, BookmarkRepository>();
+            // Any where that needs configuration
+            services.AddSingleton(provider => Configuration);
+
+            
+            // Use SqlConnectionStringHelper for this instance
+            services.AddSingleton<IConnectionStringHelper, SqlConnectionStringHelper>();
+            // Configure the option object used by SqlConnectionStringHelper
+            services.Configure<SqlConnectionStringHelperOptions>(options =>
+            {
+                options.UserName = Configuration["DatabaseAccountInfo:UserName"];
+                options.Password = Configuration["DatabaseAccountInfo:Password"];
+            });
+
+            // This somehow does not work, so we are relying on the create in Startup
+            /*
+            services.AddSingleton<Serilog.ILogger>(logger =>
+            {
+                return new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            });
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+            loggerFactory.AddSerilog();
 
             app.UseIISPlatformHandler();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseRuntimeInfoPage();
 
             app.UseApplicationInsightsRequestTelemetry();
 

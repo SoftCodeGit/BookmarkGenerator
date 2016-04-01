@@ -1,28 +1,30 @@
-{
+﻿{
   "version": "1.0.0-alpha-0001",
-  "description": "SoftCode.BookmarkGenerator.Common Class Library",
+  "description": "SoftCode.BookmarkGenerator.API.Test Class Library",
   "authors": [ "arthur.lee" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
-
-  "dependencies": {
-    "Dapper": "1.50.0-beta8",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-    "System.ComponentModel.Annotations": "4.0.11-beta-23516"
+  "commands": {
+    "test": "xunit.runner.dnx"
   },
-
   "frameworks": {
-    "dotnet5.4": {
+    "dnxcore50": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
         "System.Collections": "4.0.11-beta-23516",
-        "System.Data.SqlClient": "4.0.0-beta-23516",
         "System.Linq": "4.0.1-beta-23516",
         "System.Runtime": "4.0.21-beta-23516",
         "System.Threading": "4.0.11-beta-23516"
       }
     }
+  },
+  "dependencies": {
+    "xunit": "2.1.0-rc2-build3176",
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
+    "moq.netcore": "4.4.0-beta8",
+    "Microsoft.AspNet.Http": "1.0.0-rc1-final",
+    "Softcore.BookmarkGenerator.API": "1.0.0-alpha-0001"
   }
 }
+

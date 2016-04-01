@@ -12,11 +12,6 @@ namespace SoftCode.BookmarkGenerator.Common.Repository
     {
         private DbConnection _dbConnection;
 
-        //public BookmarkRepository(string connectionString)
-        //{
-        //    _dbConnection = new SqlConnection(connectionString);
-        //}
-
         public BookmarkRepository() { }
 
         public string ConnectionString {
@@ -50,7 +45,7 @@ namespace SoftCode.BookmarkGenerator.Common.Repository
                 commandType: System.Data.CommandType.StoredProcedure
                 );
 
-            return dedupedOptions.Select(item => item.Value);
+            return dedupedOptions.Count > 0 ? dedupedOptions.Select(item => item.Value) : null;
         }
 
         public IEnumerable<Bookmark> GetBookmarksByContextCode(string contextCode)
