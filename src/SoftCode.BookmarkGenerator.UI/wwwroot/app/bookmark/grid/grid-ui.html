@@ -1,0 +1,15 @@
+﻿<table class="table table-striped">
+    <tr>
+        <td *ngFor="#col of columns"><a (click)="sort(col.name)">{{col.descr}}</a></td>
+    </tr>
+    <tr *ngFor="#row of rows" (click)="onRowClicked(row)">
+        <td *ngFor="#col of columns">
+            <span [ngSwitch]="col.name">
+                <span *ngSwitchWhen="'HasBookmarkOptions'">
+                    <button *ngIf="row[col.name]" (click)="onViewClicked(row)">View</button>
+                </span>
+                <span *ngSwitchDefault>{{row[col.name]}}</span>
+            </span>
+        </td>
+    </tr>
+</table>
