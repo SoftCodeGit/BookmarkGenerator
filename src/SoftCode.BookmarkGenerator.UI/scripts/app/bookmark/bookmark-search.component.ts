@@ -9,11 +9,14 @@ import { DbLocationService } from '../dbLocation/db-location.service';
     selector: 'bm-search',
     template: `
         <bm-search>{{message}}</bm-search>
+        this is a test
 `
 })
 export class BookmarkSearchComponent implements OnInit {
     dbLocation: IDbLocation;
-    message: string;
+    message: string = "hello";
+
+    
 
     constructor(private _dbLocationService: DbLocationService) {
         
