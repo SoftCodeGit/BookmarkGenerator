@@ -1,0 +1,46 @@
+﻿<h3>Designate your database first</h3>
+<div *ngIf="isEdit">
+    <div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>
+                    Database Server:
+                    <span class="label label-default">{{dbLocation.serverName}}</span>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>
+                Database Name:
+                <span class="label label-default">{{dbLocation.dbName}}</span>
+            </h4>
+        </div>
+    </div>
+    <div class="top-buffer-std buttom-buffer-std">
+        <button class="btn btn-primary" type="button" (click)="onChangeClicked()">Change</button>
+    </div>
+ </div>
+<div *ngIf="!isEdit">
+    <form [ngFormModel]="dbLocationForm" (ngSubmit)="onSubmitClicked(dbLocationForm.value)" #locationForm="ngForm">
+        <div class="row">
+            <div class="col-sm-5">
+                <h4>Database Server:</h4>
+                <input type="text" class="form-control" id="dbServer" placeholder="Enter database server name here, e.g., TARGHEE" [ngFormControl]="dbLocationForm.controls['serverName']" #server="ngForm" />
+                <div class="alert alert-danger fade in" *ngIf="!server.control.pristine && server.control.hasError('required')">Database Server is required</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <h4>Database Name:</h4>
+                <input type="text" class="form-control" id="dbName" placeholder="Enter database name here, e.g., BookmarkTool"  [ngFormControl]="dbLocationForm.controls['dbName']" #db="ngForm" />
+                <div class="alert alert-danger fade in" *ngIf="!db.control.pristine && db.control.hasError('required')">Database Name is required</div>
+            </div>
+        </div>
+        <div class="top-buffer-std buttom-buffer-std">
+            <button class="btn btn-primary" type="submit" [disabled]="!locationForm.form.valid">Save</button>
+            <button class="btn btn-warning" type="button" *ngIf="showCancelButton()" (click)="onDbLocationCancelClicked()">Cancel</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "name": "ASP.NET",
+  "private": true,
+  "dependencies": {
+    "angular2": "2.0.0-beta.14",
+    "es6-shim": "^0.35.0",
+    "systemjs": "0.19.25",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.2",
+    "zone.js": "0.6.6",
+    "bootstrap": "3.3.6"
+  },
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "rimraf": "2.5.2"
+  }
+}
