@@ -2,23 +2,62 @@
 import { IDbLocation } from '../shared/db-location';
 import { DbLocationService } from '../dbLocation/db-location.service';
 
+import {BookmarkContext} from './bookmark-context';
+import {Bookmark} from './bookmark';
+import {BookmarkService} from './bookmark.service';
+
+import {DropDownComponent} from './bookmark-dropdown.component';
+import {Grid} from './grid/grid';
+import {Column} from './grid/column';
+
 /* 
 * This is just a temp component put together to show the nav bar works.
 */
 @Component({
     selector: 'bm-search',
     template: `
-        <bm-search>{{message}}</bm-search>
-        this is a test
-`
+    {{message}}
+    <div>{{errormessage}}</div>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-2">Bookmark Context</div>
+          <div class="col-sm-10"><my-dropdown [contexts]=bookmarkContexts (valueSelected)="displayValueSelected($event)"></my-dropdown></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">Search</div>
+          <div class="col-sm-10"><input [(ngModel)]="searchCriteria" placeholder="search criteria"/></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-10"><button (click)="search()">Search</button></div>
+        </div>
+    <div>
+      <label>Selected Bookmark: </label>
+      <input [value]="selectedBookmark" placeholder="bookmark name"/>
+    </div>
+    </div>
+    <p>
+      
+    </p>
+    <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (rowClicked)="getRowClicked($event)"  (viewClicked)="getViewClicked($event)"></grid>
+`,
+    directives: [DropDownComponent, Grid],
+    providers: [BookmarkService]
 })
 export class BookmarkSearchComponent implements OnInit {
     dbLocation: IDbLocation;
-    message: string = "hello";
-
+    message: string;
+    
+    columns: Array<Column>;
+    bookmarkContexts: BookmarkContext[];
+    bookmarks: Bookmark[];
+    searchCriteria: string = "";
+    selectedBookmark: string = "";
+    selectedBookmarkContext: string;
+    errormessage: string;
     
 
-    constructor(private _dbLocationService: DbLocationService) {
+    constructor(private _dbLocationService: DbLocationService, private _bookmarkService: BookmarkService) {
         
     }
 
@@ -31,5 +70,50 @@ export class BookmarkSearchComponent implements OnInit {
         this.dbLocation = this._dbLocationService.getDbLocation();
         this.message = (this.dbLocation && this.dbLocation.dbName) ? JSON.stringify(this.dbLocation) : "Please designate a database location first";
         this._dbLocationService.dbLocationChanged$.subscribe(dbLocation => this.onDbLocationChanged(dbLocation));
+
+        this.columns = this.getColumns();
+
+        this.bookmarkContexts = this._bookmarkService.getContextMock();
+
+        //TODO uncomment to call API
+        //this._bookmarkService.getReportContexts()
+        //    .subscribe(
+        //    context => this.bookmarkContexts = context,
+        //    error => this.errormessage = <any>error);
     }
+
+    displayValueSelected(ev: string):void {
+        this.selectedBookmarkContext = ev;
+    }
+
+    search():void {
+        this.bookmarks = this._bookmarkService.getBookmarksMock(this.selectedBookmarkContext, this.searchCriteria);
+        
+        //TODO uncomment to call API
+        //this._bookmarkService.searchBookmarks(this.selectedBookmarkContext, this.searchCriteria)
+        //    .subscribe(
+        //    context => this.bookmarks = context,
+        //    error => this.errormessage = <any>error);
+    }
+
+    getRowClicked(row:Bookmark):void {
+        this.selectedBookmark = row.BookmarkCode;
+    }
+
+    getViewClicked(row: Bookmark):void {
+        this.selectedBookmark = row.BookmarkCode;
+ 
+        //TODO navigate or show modal               
+    }
+
+    getColumns(): Array<Column> {
+        return [
+            new Column('BookmarkCode', 'Bookmark Code'),
+            new Column('ReportContextCode', 'Context'),
+            new Column('BookmarkDesc', 'Description'),
+            new Column('HasBookmarkOptions', 'Options')
+        ];
+    }
+
+
 }

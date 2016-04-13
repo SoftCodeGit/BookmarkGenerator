@@ -4,7 +4,7 @@ import {Sorter} from './sorter';
 
 @Component({
     selector: 'grid',
-    templateUrl: './app/grid/grid-ui.html'
+    templateUrl: './app/bookmark/grid/grid-ui.html'
 })
 
 export class Grid implements OnInit {
