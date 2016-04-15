@@ -11,7 +11,7 @@ import {BookmarkService} from './bookmark.service';
     template: `
     <div>
         <label class="copy-label">{{bookmarkText}}</label>
-        <button (click)="doCopy()" [ngClass]="copyClass">Copy</button>
+        <button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>
     </div>
   `,
     directives: [NgClass],
@@ -41,6 +41,9 @@ export class LabelCopyComponent implements OnInit {
 
     doCopy():void {
         //TODO error handling
+        //console.log("doCopy");
+        window.getSelection().removeAllRanges(); //added this at begining otherwise you need to click Copy twice.
+
         var bookmarkText = document.querySelector('.copy-label');
         console.log(bookmarkText);
 

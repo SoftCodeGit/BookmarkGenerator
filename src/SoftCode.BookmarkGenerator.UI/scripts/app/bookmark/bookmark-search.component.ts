@@ -37,7 +37,6 @@ import {Column} from './grid/column';
           <div class="col-sm-10"><button (click)="search()">Search</button></div>
         </div>
     </div>
-    <div>{{selectedBookmark}}</div>
     <div><label-copy></label-copy></div>
     <p>      
     </p>
@@ -54,7 +53,6 @@ export class BookmarkSearchComponent implements OnInit {
     bookmarkContexts: BookmarkContext[];
     bookmarks: Bookmark[];
     searchCriteria: string = "";
-    selectedBookmark: string = "";
     selectedBookmarkContext: string;
     errormessage: string;
     
@@ -102,8 +100,6 @@ export class BookmarkSearchComponent implements OnInit {
     }
 
     getRowClicked(row:Bookmark):void {
-        this.selectedBookmark = row.BookmarkCode;
-
         let _bookmarkOptionValue: BookmarkOptionValue = new BookmarkOptionValue();
         _bookmarkOptionValue.bookmarkCode = row.BookmarkCode;
 
@@ -111,7 +107,6 @@ export class BookmarkSearchComponent implements OnInit {
     }
 
     getViewClicked(row: Bookmark):void {
-        this.selectedBookmark = row.BookmarkCode;
  
         //TODO navigate or show modal               
     }
