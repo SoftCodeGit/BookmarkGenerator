@@ -7,6 +7,7 @@ using SoftCode.BookmarkGenerator.Common.Helpers;
 using Microsoft.Extensions.Logging;
 using Softcore.BookmarkGenerator.API.ViewModelHelpers;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNet.Cors;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,7 +21,7 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
     public class BookmarkController : Controller
     {
         private readonly IBookmarkRepository _bookmarkRepository;
-        private readonly IBookmarkValueMapping _bookmarkValueMapping;
+        private readonly IBookmarkValueMapper _bookmarkValueMapper;
         private readonly IConnectionStringHelper _connectionStringHelper;
         private readonly ILogger<BookmarkController> _logger;
 
@@ -33,12 +34,12 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
         /// <param name="connectionStringHelper">Helper to facilate connection string construction</param>
         /// <param name="logger">A logging provider, we are using SeriLog currently</param>
         public BookmarkController(IBookmarkRepository bookmarkRepository, IConnectionStringHelper connectionStringHelper, 
-                ILogger<BookmarkController> logger, IBookmarkValueMapping bookmarkValueMapping)
+                ILogger<BookmarkController> logger, IBookmarkValueMapper bookmarkValueMapper)
         {
             _bookmarkRepository = bookmarkRepository;
             _connectionStringHelper = connectionStringHelper;
             _logger = logger;
-            _bookmarkValueMapping = bookmarkValueMapping;
+            _bookmarkValueMapper = bookmarkValueMapper;
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
         /// <returns>A list of BookmarkCode with a child list of BookmarkValues</returns>
         [HttpGet("{bookmarkCode}")]
         [Route("BookmarkOptions/{bookmarkCode}")]
-        public IActionResult GetBookmarkOptionsByBookmarkCode([FromBody] DatabaseLocation dbLocation, string bookmarkCode)
+        public IActionResult GetBookmarkOptionsByBookmarkCode([FromQuery] DatabaseLocation dbLocation, string bookmarkCode)
         {
             if (dbLocation != null && ModelState.IsValid)
             {
@@ -67,7 +68,7 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
                         return HttpNotFound();
                     }
 
-                    return new JsonResult(_bookmarkValueMapping.CreateBookmarkOptionViewModel(bookmarkOptions), 
+                    return new JsonResult(_bookmarkValueMapper.CreateBookmarkOptionViewModel(bookmarkOptions), 
                         new Newtonsoft.Json.JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver()});
                 }
                 catch (Exception ex)

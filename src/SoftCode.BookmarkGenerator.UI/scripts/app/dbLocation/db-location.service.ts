@@ -19,4 +19,9 @@ export class DbLocationService {
         this.dbLocationChanged$.emit(dbLocation);
         return this.getDbLocation();
     }
+
+    getDbQueryString() {
+        let db = this.getDbLocation();
+        return `serverName=${db.serverName}&dbName=${db.dbName}`;
+    }
 }

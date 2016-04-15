@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Softcore.BookmarkGenerator.API.ViewModelHelpers
 {
-    public interface IBookmarkValueMapping
+    public interface IBookmarkValueMapper
     {
         IEnumerable<BookmarkOptionViewModelBase> CreateBookmarkOptionViewModel(IEnumerable<BookmarkOption> bookmarkOptions);
     }

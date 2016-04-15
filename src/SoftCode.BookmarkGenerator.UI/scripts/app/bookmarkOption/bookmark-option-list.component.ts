@@ -41,19 +41,23 @@ export class BookmarkOptionListComponent implements OnInit {
         this._bookmarkOptionValueChangeService.bookmarkOptionValueChangeBroadcast(<IBookmarkOptionValue>bookmarkValue);
     }
 
-    ngOnInit(): void {
-        // get list of bookmarkOptions
-        this._bookmarkOptionDataService.getBookmarkOptionsMock(this.bookmarkCode)
-            .subscribe(bookmarkOptions => {
-                console.log(this.bookmarkOptions);
-                this.bookmarkOptions = bookmarkOptions;
-                // get the control group based on the list of bookmark options
-                this.form = this._bookmarkOptionControlService.toControlGroup(this.bookmarkOptions);
-                // delay 1 second before calling the form's on change handler
-                this.form.valueChanges.debounceTime(1000).subscribe(form => this.onFormValueChanged(form));
-            });
+    private processBookmarkOptionResult(bookmarkOptions): void {
+        console.log("processBookmarkOptionResult");
 
-
+        this.bookmarkOptions = bookmarkOptions;
+        console.log(this.bookmarkOptions);
+        // get the control group based on the list of bookmark options
+        this.form = this._bookmarkOptionControlService.toControlGroup(this.bookmarkOptions);
+        console.log(this.form);
+        // delay 1 second before calling the form's on change handler
+        this.form.valueChanges.debounceTime(1000).subscribe(form => this.onFormValueChanged(form));
     }
 
+    ngOnInit(): void {
+        // get list of bookmarkOptions
+        this._bookmarkOptionDataService.getBookmarkOptions(this.bookmarkCode)
+            .subscribe(bookmarkOptions => this.processBookmarkOptionResult(bookmarkOptions),
+            err => console.log(err),
+            () => console.log("done"));
+    }
 }

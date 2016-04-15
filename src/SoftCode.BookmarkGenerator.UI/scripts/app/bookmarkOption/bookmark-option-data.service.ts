@@ -15,7 +15,7 @@ export class BookmarkOptionDataService {
     constructor(private _jsonp: Jsonp, private _dbLocationService: DbLocationService, private _http: Http) {
 
     }
-    // Todo: get it from api, and make it asynch    
+    
     getBookmarkOptionsMock(bookMarkCode: string): Observable<BookmarkOptionBase<any>[]> {
 
         let bookmarkOptions: BookmarkOptionBase<any>[] = [
@@ -110,15 +110,14 @@ export class BookmarkOptionDataService {
     getBookmarkOptions(bookMarkCode: string): Observable<BookmarkOptionBase<any>[]> {
         let bookmarkOptions: Observable<BookmarkOptionBase<any>[]>;
 
-        let body = JSON.stringify(this._dbLocationService.getDbLocation()); 
+        let db = this._dbLocationService.getDbLocation();
         let headers = new Headers({ "Content-Type": "application/json" });
         let options = new RequestOptions({ headers: headers });
+        let url = `${this._url}${bookMarkCode}?${this._dbLocationService.getDbQueryString()}`;
 
-        bookmarkOptions = this._http.post(this._url + bookMarkCode, body, options)
+        return this._http.get(url)
             .map(this.transformData)
             .catch(this.handleError);
-
-        return bookmarkOptions;
 
     }
 
@@ -126,15 +125,36 @@ export class BookmarkOptionDataService {
         if (res.status < 200 || res.status >= 300) {
             throw new Error('Failed response status: ' + res.status);
         }
-
+        // TODO find out if we need to cast the objects before returning
+        // I think it works now without casting since we are transpiling to ES5 which has no custom types
+        let returnList: BookmarkOptionBase<any>[] = [];
         let body = res.json();
-        console.log(body);
 
-        return null;
+        for (var n = 0; n < body.length; n++) {
+            let object = <BookmarkOptionBase<any>>body[n];
+            switch (object.controlType) {
+                case "textbox":
+                    returnList.push(
+                        <TextboxBookmarkOption>object
+                    );
+                    break;
+                case "dropdown":
+                    returnList.push(
+                        <DropdownBookmarkOption>object
+                    );
+                    break;
+                case "checkbox":
+                    returnList.push(<CheckboxBookmarkOption>object);
+                    break;
+            }
+        };
+
+        return returnList;
     }
 
     private handleError(error: any): any {
         let errMsg = error.message || 'Server error';
+        // TODO - log err to server
         console.error(errMsg); // log to console instead
         return Observable.throw(errMsg);
     }

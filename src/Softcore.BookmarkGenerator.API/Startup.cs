@@ -64,7 +64,7 @@ namespace SoftCode.BookmarkGenerator.API
                 options.Password = Configuration["DatabaseAccountInfo:Password"];
             });
 
-            services.AddSingleton<IBookmarkValueMapping, BookmarkValueMapping>();
+            services.AddSingleton<IBookmarkValueMapper, BookmarkValueMapper>();
 
             // This somehow does not work, so we are relying on the create in Startup
             /*

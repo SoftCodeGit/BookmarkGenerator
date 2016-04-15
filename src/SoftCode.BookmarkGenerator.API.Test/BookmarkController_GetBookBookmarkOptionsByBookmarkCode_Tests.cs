@@ -28,7 +28,7 @@ namespace SoftCode.BookmarkGenerator.API.Test
         private Mock<IConnectionStringHelper> _helper;
         private Mock<ILogger<BookmarkController>> _logger;
         private List<BookmarkOption> _returnObject;
-        private Mock<IBookmarkValueMapping> _valueMapping;
+        private Mock<IBookmarkValueMapper> _valueMapping;
   
         /// <summary>
         /// Set up testing objects in the constructor
@@ -167,7 +167,7 @@ namespace SoftCode.BookmarkGenerator.API.Test
             // TO-DO, figure out why the following is giving a run time error
             //_logger.Setup(l => l.LogError(It.IsAny<string>(), It.IsAny<Exception>())).Verifiable();
 
-            _valueMapping = new Mock<IBookmarkValueMapping>();
+            _valueMapping = new Mock<IBookmarkValueMapper>();
             
             _subject = new BookmarkController(_repository.Object, _helper.Object, _logger.Object, _valueMapping.Object);
                 
