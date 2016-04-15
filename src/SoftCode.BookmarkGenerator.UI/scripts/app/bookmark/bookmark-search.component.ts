@@ -5,10 +5,15 @@ import { DbLocationService } from '../dbLocation/db-location.service';
 import {BookmarkContext} from './bookmark-context';
 import {Bookmark} from './bookmark';
 import {BookmarkService} from './bookmark.service';
+import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
+import {BookmarkOptionValueChangeService} from '../bookmarkOption/bookmark-option-value-change.service';
+
+import {LabelCopyComponent} from './label-copy.component';
 
 import {DropDownComponent} from './bookmark-dropdown.component';
 import {Grid} from './grid/grid';
 import {Column} from './grid/column';
+
 
 /* 
 * This is just a temp component put together to show the nav bar works.
@@ -31,18 +36,15 @@ import {Column} from './grid/column';
           <div class="col-sm-2"></div>
           <div class="col-sm-10"><button (click)="search()">Search</button></div>
         </div>
-    <div>
-      <label>Selected Bookmark: </label>
-      <input [value]="selectedBookmark" placeholder="bookmark name"/>
     </div>
-    </div>
-    <p>
-      
+    <div>{{selectedBookmark}}</div>
+    <div><label-copy></label-copy></div>
+    <p>      
     </p>
     <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (rowClicked)="getRowClicked($event)"  (viewClicked)="getViewClicked($event)"></grid>
 `,
-    directives: [DropDownComponent, Grid],
-    providers: [BookmarkService]
+    directives: [DropDownComponent, Grid, LabelCopyComponent],
+    providers: [BookmarkService, BookmarkOptionValueChangeService]
 })
 export class BookmarkSearchComponent implements OnInit {
     dbLocation: IDbLocation;
@@ -57,7 +59,10 @@ export class BookmarkSearchComponent implements OnInit {
     errormessage: string;
     
 
-    constructor(private _dbLocationService: DbLocationService, private _bookmarkService: BookmarkService) {
+    constructor(
+        private _dbLocationService: DbLocationService,
+        private _bookmarkService: BookmarkService,
+        private _bookmarkChangeService: BookmarkOptionValueChangeService) {
         
     }
 
@@ -98,6 +103,11 @@ export class BookmarkSearchComponent implements OnInit {
 
     getRowClicked(row:Bookmark):void {
         this.selectedBookmark = row.BookmarkCode;
+
+        let _bookmarkOptionValue: BookmarkOptionValue = new BookmarkOptionValue();
+        _bookmarkOptionValue.bookmarkCode = row.BookmarkCode;
+
+        this._bookmarkChangeService.bookmarkOptionValueChangeBroadcast(_bookmarkOptionValue);
     }
 
     getViewClicked(row: Bookmark):void {
