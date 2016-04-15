@@ -1,16 +1,13 @@
-﻿
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Serilog;
-using Serilog.Sinks.RollingFile;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using SoftCode.BookmarkGenerator.Common.Repository;
-using System.Diagnostics;
-using System.IO;
+using Softcore.BookmarkGenerator.API.ViewModelHelpers;
 
 namespace SoftCode.BookmarkGenerator.API
 {
@@ -66,6 +63,8 @@ namespace SoftCode.BookmarkGenerator.API
                 options.UserName = Configuration["DatabaseAccountInfo:UserName"];
                 options.Password = Configuration["DatabaseAccountInfo:Password"];
             });
+
+            services.AddSingleton<IBookmarkValueMapping, BookmarkValueMapping>();
 
             // This somehow does not work, so we are relying on the create in Startup
             /*

@@ -5,6 +5,8 @@ using SoftCode.BookmarkGenerator.Common.Repository;
 using SoftCode.BookmarkGenerator.Common.DTO;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using Microsoft.Extensions.Logging;
+using Softcore.BookmarkGenerator.API.ViewModelHelpers;
+using Newtonsoft.Json.Serialization;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,9 +19,10 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
     [Route("api/[controller]")]
     public class BookmarkController : Controller
     {
-        private IBookmarkRepository _bookmarkRepository;
-        private IConnectionStringHelper _connectionStringHelper;
-        private ILogger<BookmarkController> _logger;
+        private readonly IBookmarkRepository _bookmarkRepository;
+        private readonly IBookmarkValueMapping _bookmarkValueMapping;
+        private readonly IConnectionStringHelper _connectionStringHelper;
+        private readonly ILogger<BookmarkController> _logger;
 
         /// <summary>
         /// Avoid newing objects, objects should injected to avoid dependencies.
@@ -30,11 +33,12 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
         /// <param name="connectionStringHelper">Helper to facilate connection string construction</param>
         /// <param name="logger">A logging provider, we are using SeriLog currently</param>
         public BookmarkController(IBookmarkRepository bookmarkRepository, IConnectionStringHelper connectionStringHelper, 
-                ILogger<BookmarkController> logger)
+                ILogger<BookmarkController> logger, IBookmarkValueMapping bookmarkValueMapping)
         {
             _bookmarkRepository = bookmarkRepository;
             _connectionStringHelper = connectionStringHelper;
             _logger = logger;
+            _bookmarkValueMapping = bookmarkValueMapping;
         }
 
         /// <summary>
@@ -62,7 +66,9 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
                     {
                         return HttpNotFound();
                     }
-                    return new ObjectResult(bookmarkOptions);
+
+                    return new JsonResult(_bookmarkValueMapping.CreateBookmarkOptionViewModel(bookmarkOptions), 
+                        new Newtonsoft.Json.JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver()});
                 }
                 catch (Exception ex)
                 {

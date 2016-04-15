@@ -4,6 +4,7 @@ using SoftCode.BookmarkGenerator.API.Controllers;
 using SoftCode.BookmarkGenerator.Common.DTO;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using SoftCode.BookmarkGenerator.Common.Repository;
+using Softcore.BookmarkGenerator.API.ViewModelHelpers;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http.Internal;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ namespace SoftCode.BookmarkGenerator.API.Test
         private Mock<IConnectionStringHelper> _helper;
         private Mock<ILogger<BookmarkController>> _logger;
         private List<BookmarkOption> _returnObject;
+        private Mock<IBookmarkValueMapping> _valueMapping;
   
         /// <summary>
         /// Set up testing objects in the constructor
@@ -164,8 +166,10 @@ namespace SoftCode.BookmarkGenerator.API.Test
             _logger = new Mock<ILogger<BookmarkController>>();
             // TO-DO, figure out why the following is giving a run time error
             //_logger.Setup(l => l.LogError(It.IsAny<string>(), It.IsAny<Exception>())).Verifiable();
+
+            _valueMapping = new Mock<IBookmarkValueMapping>();
             
-            _subject = new BookmarkController(_repository.Object, _helper.Object, _logger.Object);
+            _subject = new BookmarkController(_repository.Object, _helper.Object, _logger.Object, _valueMapping.Object);
                 
         }
     }

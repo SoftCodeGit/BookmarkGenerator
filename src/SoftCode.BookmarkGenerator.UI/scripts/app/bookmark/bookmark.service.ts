@@ -3,8 +3,8 @@ import {Http, Response} from 'angular2/http';
 import {Observable}     from 'rxjs/Observable';
 import {BookmarkContext}     from './bookmark-context';
 import {Bookmark} from './bookmark';
-import {BookmarkOptionValue} from './bookmark-option-value';
-import {BookmarkOptionValuePair} from './bookmark-option-value';
+import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
+import {BookmarkOptionValuePair} from '../bookmarkOption/bookmark-option-value';
 
 import {CONTEXTS, BOOKMARKS}     from './bookmark.service.mock';
 

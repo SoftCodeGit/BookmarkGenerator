@@ -20,7 +20,8 @@
     "SoftCode.BookmarkGenerator.Common": "1.0.0-alpha-0001",
     "Serilog.Extensions.Logging": "1.0.0-rc1-final-10092",
     "Serilog.Sinks.RollingFile": "2.0.0-beta-700",
-    "Serilog.Settings.Configuration": "2.0.0-beta-6"
+    "Serilog.Settings.Configuration": "2.0.0-beta-6",
+    "AutoMapper": "4.2.1"
   },
 
   "commands": {
