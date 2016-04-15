@@ -5,7 +5,7 @@ import { BookmarkOptionBase } from './bookmark-option-base';
 
 @Component({
     selector: '<bm-option></bm-option>',
-    templateUrl: 'app/bookmark/bookmark-option.component.html'
+    templateUrl: 'app/bookmarkOption/bookmark-option.component.html'
 })
 export class BookmarkOptionComponent {
     @Input() bookmarkOption: BookmarkOptionBase<any>;   // the object containing the meta data of the control

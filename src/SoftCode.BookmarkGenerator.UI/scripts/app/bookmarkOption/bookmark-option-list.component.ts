@@ -14,7 +14,7 @@ import {IBookmarkOptionValue} from './bookmark-option-value';
 
 @Component({
     selector: 'bm-form',
-    templateUrl: 'app/bookmark/bookmark-option-list.component.html',
+    templateUrl: 'app/bookmarkOption/bookmark-option-list.component.html',
     directives: [BookmarkOptionComponent]
 })
 export class BookmarkOptionListComponent implements OnInit {
