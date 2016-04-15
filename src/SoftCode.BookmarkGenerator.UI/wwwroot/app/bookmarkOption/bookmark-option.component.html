@@ -1,0 +1,30 @@
+﻿<div [ngFormModel] ="form" class="form-group">
+    <label [attr.for]="bookmarkOption.key">{{bookmarkOption.label}}</label>
+
+    <div [ngSwitch] ="bookmarkOption.controlType" class="form-inline">
+
+        <input *ngSwitchWhen="'textbox'" [ngFormControl]="form.controls[bookmarkOption.key]" [id]="bookmarkOption.key" [type]="bookmarkOption.type" class="form-control ctrl-width-std" />
+
+        <select *ngSwitchWhen="'dropdown'" [id]="bookmarkOption.key" [ngFormControl]="form.controls[bookmarkOption.key]" class="form-control ctrl-width-std">
+            <option *ngFor="#opt of bookmarkOption.dropdownOptions" [value]="opt.key">{{opt.value}}</option>
+        </select>
+
+        <div *ngSwitchWhen="'checkbox'" class="checkbox">
+            <label>
+                    <input type="checkbox" [ngFormControl]="form.controls[bookmarkOption.key]" [id]="bookmarkOption.key" /> {{bookmarkOption.label}}
+            </label>
+        </div>
+
+        <!-- Radios are not ready for prime time; they cannot be grouped together so that we can easily extract a single form value from the group-->
+        <!--<span *ngSwitchWhen="'radio'"  [ngFormControl]="form.controls[bookmarkOption.key]" class="form-control ctrl-width-std">
+            <div *ngFor="#opt of bookmarkOption.radioOptions" class="radio">
+                <label>
+                    <input type="radio" name="bookmarkOption.key" value="" [ngFormControl]="" />
+                </label>
+            </div>
+        </span>-->
+
+        <button type="button" (click)="resetValue()" class="btn btn-info" *ngIf="showReset">Reset</button>
+    </div>
+    <div class="alert alert-danger fade in" *ngIf="isMissing">{{bookmarkOption.label}} is required</div>
+</div>

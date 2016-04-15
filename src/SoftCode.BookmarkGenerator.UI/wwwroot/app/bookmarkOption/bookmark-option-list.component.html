@@ -1,0 +1,15 @@
+﻿<div>
+    <div>
+        <bm-display></bm-display>
+    </div>
+    <form (ngSubmit)="onSubmit(form.value)" [ngFormModel]="form">
+
+        <div *ngFor="#bookmarkOption of bookmarkOptions">
+            <bm-option [bookmarkOption]="bookmarkOption" [form]="form"></bm-option>
+        </div>
+
+        <div class="top-buffer-std buttom-buffer-std">
+            <button type="submit" [disabled]="!form.valid" class="btn btn-primary">GO</button>
+        </div>
+    </form>
+</div>
