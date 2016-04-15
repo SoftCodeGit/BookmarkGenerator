@@ -59,7 +59,7 @@ namespace SoftCode.BookmarkGenerator.API.Test
             // Note that controller's Model State is not checked here because we are
             // not going through the normal MVC request pipeline
             var result = _subject.GetBookmarkOptionsByBookmarkCode(new DatabaseLocation(), "code");
-            Assert.IsType<ObjectResult>(result);
+            Assert.IsType<JsonResult>(result);
         }
 
         [Fact]
