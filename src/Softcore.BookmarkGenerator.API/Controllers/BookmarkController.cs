@@ -83,5 +83,46 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
 
             return HttpBadRequest("Missing database location data: both ServerName and DbName are required.");
         }
+
+        /// <summary>
+        /// Call this using url like: http:http://localhost:51989/api/bookmark/BookmarkOptions/bookmarkReportContext?ServerName=6530-DEV&DbName=BookmarkTool
+        /// In the request body, use this json object: {"ServerName": "TARGHEE", "DbName": "BookmarkTool"}
+        /// </summary>
+        /// <param name="dbLocation">POCO containing database location info the user intend to use</param>
+        /// <returns>A list of ReportContext that are used for Bookmarks</returns>
+        [HttpGet]
+        [Route("BookmarkReportContext")]
+        public IActionResult GetBookmarkReportContexts([FromQuery] DatabaseLocation dbLocation)
+        {
+            if (dbLocation != null && ModelState.IsValid)
+            {
+                IEnumerable<ReportContext> reportContexts;
+                try
+                {
+                    // only reason we set the connection string here is because that's part of the requirement.
+                    // normally, connection strings are injected into repository objects and we won't ever need to deal with 
+                    // it.
+                    _bookmarkRepository.ConnectionString = _connectionStringHelper.GetConnectionString(dbLocation);
+                    reportContexts = _bookmarkRepository.GetBookmarkReportContexts();
+                    if (reportContexts == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    return new JsonResult(reportContexts);
+                }
+                catch (Exception ex)
+                {
+                    // log
+                    _logger.LogError(string.Format("DBServer: {0}, DBName: {1}", dbLocation.ServerName, dbLocation.DbName), ex);
+                    // return not success to client
+                    string errorString = string.Format("An error occurred retrieving Bookmark Report Contexts");
+                    return HttpBadRequest(errorString);
+                }
+            }
+
+            return HttpBadRequest("Missing database location data: both ServerName and DbName are required.");
+        }
+
     }
 }

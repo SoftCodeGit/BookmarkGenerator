@@ -57,5 +57,16 @@ namespace SoftCode.BookmarkGenerator.Common.Repository
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<ReportContext> GetBookmarkReportContexts()
+        {
+            var sql =
+                    @"select distinct bm.ReportContextCode, rc.ReportContextDesc
+                    from SYS_Bookmark bm
+                    inner join SYS_ReportContext rc on rc.ReportContextCode = bm.ReportContextCode
+                    order by rc.ReportContextDesc";
+
+            return _dbConnection.Query<ReportContext>(sql);
+        }
     }
 }

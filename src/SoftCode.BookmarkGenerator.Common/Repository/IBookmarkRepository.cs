@@ -12,5 +12,7 @@ namespace SoftCode.BookmarkGenerator.Common.Repository
         IEnumerable<Bookmark> GetBookmarksByContextCode(string contextCode);
 
         IEnumerable<string> GetContextCodes();
+
+        IEnumerable<ReportContext> GetBookmarkReportContexts();
     }
 }
