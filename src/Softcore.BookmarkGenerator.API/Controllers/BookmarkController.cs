@@ -5,7 +5,7 @@ using SoftCode.BookmarkGenerator.Common.Repository;
 using SoftCode.BookmarkGenerator.Common.DTO;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using Microsoft.Extensions.Logging;
-using Softcore.BookmarkGenerator.API.ViewModelHelpers;
+using SoftCode.BookmarkGenerator.API.ViewModelHelpers;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNet.Cors;
 
@@ -85,8 +85,8 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
         }
 
         /// <summary>
-        /// Call this using url like: http:http://localhost:51989/api/bookmark/BookmarkOptions/bookmarkReportContext?ServerName=6530-DEV&DbName=BookmarkTool
-        /// In the request body, use this json object: {"ServerName": "TARGHEE", "DbName": "BookmarkTool"}
+        /// Call this using url like: http://localhost:51989/api/bookmark/BookmarkOptions/BookmarkReportContext?ServerName=6530-DEV&DbName=BookmarkTool
+        /// Pass ServerName and Database name in query string ie. ?ServerName=6530-DEV&DbName=BookmarkTool
         /// </summary>
         /// <param name="dbLocation">POCO containing database location info the user intend to use</param>
         /// <returns>A list of ReportContext that are used for Bookmarks</returns>
@@ -117,6 +117,46 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
                     _logger.LogError(string.Format("DBServer: {0}, DBName: {1}", dbLocation.ServerName, dbLocation.DbName), ex);
                     // return not success to client
                     string errorString = string.Format("An error occurred retrieving Bookmark Report Contexts");
+                    return HttpBadRequest(errorString);
+                }
+            }
+
+            return HttpBadRequest("Missing database location data: both ServerName and DbName are required.");
+        }
+
+        /// <summary>
+        /// Call this using url like: http://localhost:51989/api/bookmark/SearchBookmarks?ServerName=6530-DEV&DbName=BookmarkTool&ReportContextCode=ACTION&SearchCriteria=Date
+        /// In the request body, use this json object: {"ServerName": "TARGHEE", "DbName": "BookmarkTool"}
+        /// </summary>
+        /// <param name="dbLocation">POCO containing database location info the user intend to use</param>
+        /// <param name="reportContextCode">ReportContextCode used determine the hierarchy of bookmarks which may be returned</param>
+        /// <param name="searchCriteria">Search criteria used to filter bookmarks</param>
+        /// <returns>A list of Bookmarks for a specific Report Context hierarchy that match optional search criteria</returns>
+        [HttpGet]
+        [Route("SearchBookmarks")]
+        public IActionResult SearchBookmarks([FromQuery] DatabaseLocation dbLocation, [FromQuery]string reportContextCode, [FromQuery]string searchCriteria)
+        {
+            if (dbLocation != null && ModelState.IsValid)
+            {
+                IEnumerable<BookmarkViewModel> bookmarks;
+                try
+                {
+                    _bookmarkRepository.ConnectionString = _connectionStringHelper.GetConnectionString(dbLocation);
+                    bookmarks = _bookmarkRepository.SearchBookmarks(reportContextCode, searchCriteria);
+                    if (bookmarks == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    return new JsonResult(bookmarks);
+                }
+                catch (Exception ex)
+                {
+                    //TODO handle null parameters
+                    // log
+                    _logger.LogError(string.Format("ReportContext: {0}, SearchCritiera: {1}, DBServer: {2}, DBName: {3}", reportContextCode, searchCriteria, dbLocation.ServerName, dbLocation.DbName), ex);
+                    // return not success to client
+                    string errorString = string.Format("An error occurred retrieving Bookmarks for Report Context {0} and Search Criteria", reportContextCode, searchCriteria);
                     return HttpBadRequest(errorString);
                 }
             }

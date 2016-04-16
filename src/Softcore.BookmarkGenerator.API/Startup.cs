@@ -7,7 +7,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Serilog;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using SoftCode.BookmarkGenerator.Common.Repository;
-using Softcore.BookmarkGenerator.API.ViewModelHelpers;
+using SoftCode.BookmarkGenerator.API.ViewModelHelpers;
 
 namespace SoftCode.BookmarkGenerator.API
 {
