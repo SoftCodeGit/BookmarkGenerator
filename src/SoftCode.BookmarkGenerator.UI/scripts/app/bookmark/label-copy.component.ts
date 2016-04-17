@@ -1,4 +1,4 @@
-﻿import {Component, OnInit} from 'angular2/core';
+﻿import {Component, OnInit, Input} from 'angular2/core';
 import {NgClass} from 'angular2/common';
 import {Subscription}   from 'rxjs/Subscription';
 
@@ -10,8 +10,10 @@ import {BookmarkService} from './bookmark.service';
     selector: 'label-copy',
     template: `
     <div>
-        <label class="copy-label">{{bookmarkText}}</label>
-        <button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>
+        <!--<label class="copy-label">{{bookmarkText}}</label>-->
+        <label class=copy-label-{{bookmarkText}}>{{bookmarkText}}</label>
+        <!--<button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>-->
+        <button (click)="doCopy()" [ngClass]="copyClass">Copy</button>
     </div>
   `,
     directives: [NgClass],
@@ -19,7 +21,8 @@ import {BookmarkService} from './bookmark.service';
 })
 
 export class LabelCopyComponent implements OnInit {
-    bookmarkText: string;
+    @Input() bookmarkText: string;
+    //bookmarkText: string;
     copyClass: string;
 
     constructor(
@@ -28,23 +31,28 @@ export class LabelCopyComponent implements OnInit {
     ) { };
 
     ngOnInit() {
-        this._bookmarkOptionValueChangeService.bookmarkOptionValueChanged$.subscribe(optionValue => this.onBookmarkOptionValueChanged(optionValue));
+        //this._bookmarkOptionValueChangeService.bookmarkOptionValueChanged$.subscribe(optionValue => this.onBookmarkOptionValueChanged(optionValue));
     };
 
 
 
     onBookmarkOptionValueChanged(optionValue: BookmarkOptionValue):void {
-        this.bookmarkText = this._bookmarkService.getBookmarkText(optionValue);
+        //this.bookmarkText = this._bookmarkService.getBookmarkText(optionValue);
     }
+
+
 
 
 
     doCopy():void {
         //TODO error handling
+
         //console.log("doCopy");
+        //console.log(ev);
         window.getSelection().removeAllRanges(); //added this at begining otherwise you need to click Copy twice.
 
-        var bookmarkText = document.querySelector('.copy-label');
+        //selector must be unique on page or else it will only return the first one it finds
+        var bookmarkText = document.querySelector('.copy-label-' + this.bookmarkText + '');
         console.log(bookmarkText);
 
         var range = document.createRange();

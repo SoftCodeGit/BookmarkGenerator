@@ -37,10 +37,10 @@ import {Column} from './grid/column';
           <div class="col-sm-10"><button (click)="search()">Search</button></div>
         </div>
     </div>
-    <div><label-copy></label-copy></div>
+    <!--<div><label-copy [bookmarkText]="bookmarkText"></label-copy></div>-->
     <p>      
     </p>
-    <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (rowClicked)="getRowClicked($event)"  (viewClicked)="getViewClicked($event)"></grid>
+    <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (rowClicked)="getRowClicked($event)" (viewClicked)="getViewClicked($event)"></grid>
 `,
     directives: [DropDownComponent, Grid, LabelCopyComponent],
     providers: [BookmarkService, BookmarkOptionValueChangeService]
@@ -55,6 +55,8 @@ export class BookmarkSearchComponent implements OnInit {
     searchCriteria: string = "";
     selectedBookmarkContext: string;
     errormessage: string;
+
+    bookmarkText: string;
     
 
     constructor(
@@ -99,11 +101,14 @@ export class BookmarkSearchComponent implements OnInit {
         //    error => this.errormessage = <any>error);
     }
 
-    getRowClicked(row:Bookmark):void {
-        let _bookmarkOptionValue: BookmarkOptionValue = new BookmarkOptionValue();
-        _bookmarkOptionValue.bookmarkCode = row.BookmarkCode;
+    getRowClicked(row: Bookmark): void {
 
-        this._bookmarkChangeService.bookmarkOptionValueChangeBroadcast(_bookmarkOptionValue);
+        //this.bookmarkText = row.BookmarkCode;
+
+        //let _bookmarkOptionValue: BookmarkOptionValue = new BookmarkOptionValue();
+        //_bookmarkOptionValue.bookmarkCode = row.BookmarkCode;
+
+        //this._bookmarkChangeService.bookmarkOptionValueChangeBroadcast(_bookmarkOptionValue);
     }
 
     getViewClicked(row: Bookmark):void {
