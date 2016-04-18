@@ -6,14 +6,15 @@ import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
 import {BookmarkOptionValueChangeService} from '../bookmarkOption/bookmark-option-value-change.service';
 import {BookmarkService} from './bookmark.service';
 
+
 @Component({
     selector: 'label-copy',
     template: `
     <div>
         <!--<label class="copy-label">{{bookmarkText}}</label>-->
-        <label class=copy-label-{{bookmarkText}}>{{bookmarkText}}</label>
-        <!--<button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>-->
         <button (click)="doCopy()" [ngClass]="copyClass">Copy</button>
+        <label class=copy-label-{{bookmarkText}}><{{bookmarkText}}></label>
+        <!--<button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>-->
     </div>
   `,
     directives: [NgClass],
