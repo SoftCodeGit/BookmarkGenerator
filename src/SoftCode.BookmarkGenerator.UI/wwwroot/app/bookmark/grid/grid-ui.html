@@ -1,8 +1,10 @@
 ﻿<table class="table table-striped">
     <tr>
+        <td>Copy</td>
         <td *ngFor="#col of columns"><a (click)="sort(col.name)">{{col.descr}}</a></td>
     </tr>
     <tr *ngFor="#row of rows" (click)="onRowClicked(row)">
+        <td><label-copy [bookmarkText]="row.BookmarkCode"></label-copy></td>
         <td *ngFor="#col of columns">
             <span [ngSwitch]="col.name">
                 <span *ngSwitchWhen="'HasBookmarkOptions'">

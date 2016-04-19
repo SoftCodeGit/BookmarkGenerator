@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
 using System.Data.SqlClient;
 using System.Data.Common;
 using SoftCode.BookmarkGenerator.Common.DTO;
@@ -68,5 +69,25 @@ namespace SoftCode.BookmarkGenerator.Common.Repository
 
             return _dbConnection.Query<ReportContext>(sql);
         }
+
+        public IEnumerable<BookmarkViewModel> SearchBookmarks(string reportContextCode, string searchCriteria)
+        {
+
+            var o = _dbConnection.Query<BookmarkViewModel>("USP_Bookmark",
+                new
+                {
+                    BookMarkCode = "",
+                    ReportContextCode = reportContextCode,
+                    SubReportContextCode = "",
+                    BookmarkDesc = searchCriteria,
+                    IsHelper = 0,
+                    Mode = 6
+                },
+                commandType: CommandType.StoredProcedure);
+
+            return o;
+
+        }
+
     }
 }

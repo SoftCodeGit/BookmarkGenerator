@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Softcore.BookmarkGenerator.API.ViewModels
+namespace SoftCode.BookmarkGenerator.API.ViewModels
 {
     public class BookmarkOptionViewModelBase
     {

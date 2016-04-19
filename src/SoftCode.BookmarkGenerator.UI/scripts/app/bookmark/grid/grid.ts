@@ -1,10 +1,12 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
 import {Column} from './column';
 import {Sorter} from './sorter';
+import {LabelCopyComponent} from '../label-copy.component';
 
 @Component({
     selector: 'grid',
-    templateUrl: './app/bookmark/grid/grid-ui.html'
+    templateUrl: './app/bookmark/grid/grid-ui.html',
+    directives: [LabelCopyComponent]
 })
 
 export class Grid implements OnInit {

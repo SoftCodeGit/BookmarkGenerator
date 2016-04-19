@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using SoftCode.BookmarkGenerator.Common.DTO;
-using Softcore.BookmarkGenerator.API.ViewModels;
+using SoftCode.BookmarkGenerator.API.ViewModels;
 using System.Linq;
 
-namespace Softcore.BookmarkGenerator.API.ViewModelHelpers
+namespace SoftCode.BookmarkGenerator.API.ViewModelHelpers
 {
     public class BookmarkValueMapper : IBookmarkValueMapper
     {

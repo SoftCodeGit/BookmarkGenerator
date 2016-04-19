@@ -4,7 +4,7 @@ using SoftCode.BookmarkGenerator.API.Controllers;
 using SoftCode.BookmarkGenerator.Common.DTO;
 using SoftCode.BookmarkGenerator.Common.Helpers;
 using SoftCode.BookmarkGenerator.Common.Repository;
-using Softcore.BookmarkGenerator.API.ViewModelHelpers;
+using SoftCode.BookmarkGenerator.API.ViewModelHelpers;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http.Internal;
 using Microsoft.Extensions.Logging;
