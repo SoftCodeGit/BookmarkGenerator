@@ -35,3 +35,14 @@ a.router-link-active {
     width: 85% !important
 }
 
+.ctrl-width-sm {
+    width: 60% !important
+}
+
+.transparent-ctrl {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: none;
+}
+

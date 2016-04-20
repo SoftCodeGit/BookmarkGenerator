@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit  } from 'angular2/core';
-import { IDbLocation } from '../shared/db-location';
+import { IDbLocation } from '../shared/dbLocation/db-location';
 import { DbLocationService } from '../dbLocation/db-location.service'
 import { DbLocationBaseComponent } from '../dbLocation/db-location-base.component';
 import {

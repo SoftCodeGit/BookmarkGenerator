@@ -1,15 +1,11 @@
 ﻿<div>
-    <div>
-        
+    <div>       
     </div>
     <form (ngSubmit)="onSubmit(form.value)" [ngFormModel]="form">
-
         <div *ngFor="#bookmarkOption of bookmarkOptions">
             <bm-option [bookmarkOption]="bookmarkOption" [form]="form"></bm-option>
         </div>
-
-        <div class="top-buffer-std buttom-buffer-std">
-            <button type="submit" [disabled]="!form.valid" class="btn btn-primary">GO</button>
-        </div>
     </form>
+    <button class="btn btn-warning" (click)="onBackClicked()">Back</button>
+    <button class="btn btn-primary" (click)="onCopyClicked()">Copy</button>
 </div>

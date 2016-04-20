@@ -13,7 +13,7 @@ import {BookmarkService} from './bookmark.service';
     <div>
         <!--<label class="copy-label">{{bookmarkText}}</label>-->
         <button (click)="doCopy()" [ngClass]="copyClass">Copy</button>
-        <label class=copy-label-{{bookmarkText}}><{{bookmarkText}}></label>
+        <label class=copy-label-{{bookmarkText}} [hidden]="false"><{{bookmarkText}}></label>
         <!--<button *ngIf="bookmarkText"  (click)="doCopy()" [ngClass]="copyClass">Copy</button>-->
     </div>
   `,

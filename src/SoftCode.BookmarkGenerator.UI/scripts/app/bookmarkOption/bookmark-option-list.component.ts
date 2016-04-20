@@ -4,60 +4,97 @@
 // At this point, there are no UI associated with each control, so we loop over the list of options
 // which have the UI meta data.  We send the form and each option to bookmark-option.component to create the option's
 // widget. Each widget is binded to its corresponding control in the form using dynamically created code.  
-import {Component, Input, OnInit}  from 'angular2/core';
+import {Component, Input, OnInit, OnChanges, SimpleChange}  from 'angular2/core';
 import {ControlGroup}              from 'angular2/common';
 import {BookmarkOptionDataService} from './bookmark-option-data.service';
 import {BookmarkOptionControlService} from './bookmark-option-control.service';
 import {BookmarkOptionComponent} from './bookmark-option.component';
 import {BookmarkOptionValueChangeService} from './bookmark-option-value-change.service';
 import {IBookmarkOptionValue} from './bookmark-option-value';
+import {BookmarkGenerationService} from '../bookmark/bookmark-generation.service';
+import {ClipboardCopyCommandService, IClipboardCopyCommand} from '../shared/clipboard/clipboard-command.service';
 
 @Component({
     selector: 'bm-form',
     templateUrl: 'app/bookmarkOption/bookmark-option-list.component.html',
-    directives: [BookmarkOptionComponent]
+    directives: [BookmarkOptionComponent],
+    providers: [BookmarkOptionControlService, BookmarkOptionDataService]
 })
-export class BookmarkOptionListComponent implements OnInit {
+export class BookmarkOptionListComponent implements OnInit, OnChanges {
     
     @Input() bookmarkCode: string;
-    form: ControlGroup;
+    form: ControlGroup = new ControlGroup({});
     bookmarkOptions: any[];
 
     constructor(private _bookmarkOptionDataService: BookmarkOptionDataService,
         private _bookmarkOptionControlService: BookmarkOptionControlService,
-        private _bookmarkOptionValueChangeService: BookmarkOptionValueChangeService) {
+        private _bookmarkOptionValueChangeService: BookmarkOptionValueChangeService,
+        private _bookmarkGenerationService: BookmarkGenerationService,
+        private _clipboadCopyCommandService: ClipboardCopyCommandService) {
     }
 
     onSubmit(value: string): void{
         console.log(JSON.stringify(value));
     }
 
-    onFormValueChanged(value: any): void {
-        let formValues = JSON.parse(JSON.stringify(value))
+    onBackClicked() {
+        // inform listener that we are done with the selection so that we can reset the state
+        this._bookmarkOptionValueChangeService.bookmarkOptionValueSelectionDoneBroadcast("Done");
+    }
+
+    onCopyClicked() {
+        this.onFormValueChanged(this.form.value, true);
+    }
+
+    private onFormValueChanged(value: any, copyToClipboard: boolean = false): void {
+        // TODO - put form value transformation in a service
+        let keyValues = [];
+        if (value) {
+            let keys = Object.keys(value)
+         
+            keys.forEach(key => {
+                keyValues.push({ key: key, value: value[key] });
+            });
+        }
+
         let bookmarkValue = {
             bookmarkCode: this.bookmarkCode,
-            formValues: formValues
+            formValues: keyValues
         };
-        this._bookmarkOptionValueChangeService.bookmarkOptionValueChangeBroadcast(<IBookmarkOptionValue>bookmarkValue);
+        let bookmark = this._bookmarkGenerationService.getBookmarkText(<IBookmarkOptionValue>bookmarkValue);
+        // executeNow = false => do not auto copy, just update the clipboard control with the bookmark
+        this._clipboadCopyCommandService.copyCommandServiceCommenceCopy(<IClipboardCopyCommand>{ text: bookmark, executeNow: copyToClipboard });
     }
 
     private processBookmarkOptionResult(bookmarkOptions): void {
-        console.log("processBookmarkOptionResult");
-
+        
         this.bookmarkOptions = bookmarkOptions;
-        console.log(this.bookmarkOptions);
+
         // get the control group based on the list of bookmark options
         this.form = this._bookmarkOptionControlService.toControlGroup(this.bookmarkOptions);
-        console.log(this.form);
+
         // delay 1 second before calling the form's on change handler
         this.form.valueChanges.debounceTime(1000).subscribe(form => this.onFormValueChanged(form));
+
+        // this call just set the bookmark to the bookmark code with no options in the clipboard, it is just for display
+        this.onFormValueChanged(null);
     }
 
-    ngOnInit(): void {
+    private getBookmarkOptions() {
         // get list of bookmarkOptions
         this._bookmarkOptionDataService.getBookmarkOptions(this.bookmarkCode)
             .subscribe(bookmarkOptions => this.processBookmarkOptionResult(bookmarkOptions),
             err => console.log(err),
             () => console.log("done"));
+    }
+
+    // listen in on change, and only go and get the data when bookmarkCode has been populated
+    ngOnChanges(changes: { [bookmarkCode: string]: SimpleChange }) {
+        if (this.bookmarkCode)
+            this.getBookmarkOptions();
+    }
+
+    ngOnInit(): void {
+
     }
 }
