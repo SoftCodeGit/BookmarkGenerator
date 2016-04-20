@@ -16,6 +16,7 @@ export class Grid implements OnInit {
 
     @Output() rowClicked = new EventEmitter();
     @Output() viewClicked = new EventEmitter();
+    @Output() copyClicked = new EventEmitter();
 
     sorter = new Sorter();
 
@@ -29,6 +30,10 @@ export class Grid implements OnInit {
 
     onRowClicked(row: any) {
         this.rowClicked.emit(row);
+    }
+
+    onCopyClicked(row: any) {
+        this.copyClicked.emit(row);
     }
 
     onViewClicked(row: any) {

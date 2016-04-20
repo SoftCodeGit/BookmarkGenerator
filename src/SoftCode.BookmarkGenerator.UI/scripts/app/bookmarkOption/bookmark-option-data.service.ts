@@ -1,5 +1,5 @@
 ﻿import {Injectable} from 'angular2/core';
-import {Http, Response, Headers, RequestOptions, Jsonp} from 'angular2/http';
+import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 import {Observable}     from 'rxjs/Observable';
 import {BookmarkOptionBase} from './bookmark-option-base';
 import {DropdownBookmarkOption} from './bookmark-option-dropdown';
@@ -9,10 +9,10 @@ import {DbLocationService } from '../dbLocation/db-location.service';
 
 @Injectable()
 export class BookmarkOptionDataService {
-    
+    // TODO: move this to a CONFIG object
     private _url: string = "http://localhost:51985/api/bookmark/BookmarkOptions/";
 
-    constructor(private _jsonp: Jsonp, private _dbLocationService: DbLocationService, private _http: Http) {
+    constructor(private _dbLocationService: DbLocationService, private _http: Http) {
 
     }
     
@@ -108,7 +108,6 @@ export class BookmarkOptionDataService {
     };
 
     getBookmarkOptions(bookMarkCode: string): Observable<BookmarkOptionBase<any>[]> {
-        let bookmarkOptions: Observable<BookmarkOptionBase<any>[]>;
 
         let db = this._dbLocationService.getDbLocation();
         let headers = new Headers({ "Content-Type": "application/json" });

@@ -1,5 +1,5 @@
 ﻿import { Injectable, EventEmitter } from 'angular2/core';
-import { IDbLocation } from '../shared/db-location';
+import { IDbLocation } from '../shared/dbLocation/db-location';
 
 @Injectable()
 export class DbLocationService {

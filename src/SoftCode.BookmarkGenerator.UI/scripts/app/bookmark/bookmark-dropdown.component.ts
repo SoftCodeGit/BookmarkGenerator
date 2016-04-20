@@ -4,7 +4,7 @@ import {BookmarkContext} from './bookmark-context';
 @Component({
     selector: 'my-dropdown',
     template: `
-    <select  [ngModel]="selectedItem"  (change)="onSelect($event.target.value)">
+    <select  [ngModel]="selectedItem"  (change)="onSelect($event.target.value)" class="form-control">
       <option *ngFor="#context of contexts" [value]="context.ReportContextCode">{{context.ReportContextDesc}}</option>
     </select>
     `

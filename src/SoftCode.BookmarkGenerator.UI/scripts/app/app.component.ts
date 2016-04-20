@@ -3,19 +3,23 @@ import {HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/Rx';
 import { RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router';
 
-import { IDbLocation } from './shared/db-location';
+import { IDbLocation } from './shared/dbLocation/db-location';
 import { DbLocationService } from './dbLocation/db-location.service';
 import { DbLocationFormsComponent } from './dbLocation/db-location-forms.component';
 import { BookmarkSearchComponent} from './bookmark/bookmark-search.component';
+import {IClipboardCopyCommand, ClipboardCopyCommandService} from './shared/clipboard/clipboard-command.service';
+
+import {ToastComponent} from './shared/toast/toast.component';
 
 @Component({
     selector: 'bm-app',
     templateUrl: 'app/app.component.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, ToastComponent],
     //TODO: uncomment registering of services when they are available
     providers: [
         DbLocationService
         , HTTP_PROVIDERS
+        , ClipboardCopyCommandService
         //, BookmarkOptionDataService
         //, BookmarkOptionControlService
         //, BookmarkOptionValueChangeService
@@ -24,28 +28,27 @@ import { BookmarkSearchComponent} from './bookmark/bookmark-search.component';
 
 @RouteConfig([
         { path: '/', name: 'Home', component: DbLocationFormsComponent, useAsDefault: true },
-        { path: '/search', name: 'Search', component: BookmarkSearchComponent }
+        { path: '/bookmark', name: 'Bookmark', component: BookmarkSearchComponent }
     ])
 
 export class AppComponent implements OnInit {
     
     public tabItems = [
         { caption: 'Home', link: ['Home'] },
-        { caption: 'Search', link: ['Search'] },
+        { caption: 'Bookmark', link: ['Bookmark'] },
     ];
 
-    constructor(private _dbLocationService: DbLocationService,
-                private _router: Router    ) {
+    constructor(private _router: Router    ) {
         
     }
     
     private onDbLocationChanged(dbLocation: IDbLocation): void {
-        console.log("From app.Component: " + JSON.stringify(dbLocation));
-        this._router.navigate(['Search']);
+        //console.log("From app.Component: " + JSON.stringify(dbLocation));
+        this._router.navigate(['Bookmark']);
     }
 
     ngOnInit(): void {
-        this._dbLocationService.dbLocationChanged$.subscribe(dbLocation => this.onDbLocationChanged(dbLocation));
+
     }
 
 }

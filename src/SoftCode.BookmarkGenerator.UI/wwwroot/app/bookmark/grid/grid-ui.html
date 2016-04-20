@@ -1,14 +1,17 @@
 ﻿<table class="table table-striped">
-    <tr>
-        <td>Copy</td>
-        <td *ngFor="#col of columns"><a (click)="sort(col.name)">{{col.descr}}</a></td>
-    </tr>
+    <thead>
+        <tr>
+            <th>Copy</th>
+            <th *ngFor="#col of columns"><a (click)="sort(col.name)">{{col.descr}}</a></th>
+        </tr>           
+    </thead>
     <tr *ngFor="#row of rows" (click)="onRowClicked(row)">
-        <td><label-copy [bookmarkText]="row.BookmarkCode"></label-copy></td>
+        <!--<td><label-copy [bookmarkText]="row.BookmarkCode" [hide]="true"></label-copy></td>-->
+        <td><button class="btn btn-default" (click)="onCopyClicked(row)">Copy</button></td>
         <td *ngFor="#col of columns">
             <span [ngSwitch]="col.name">
                 <span *ngSwitchWhen="'HasBookmarkOptions'">
-                    <button *ngIf="row[col.name]" (click)="onViewClicked(row)">View</button>
+                    <button *ngIf="row[col.name]" (click)="onViewClicked(row)" class="btn btn-default">View</button>
                 </span>
                 <span *ngSwitchDefault>{{row[col.name]}}</span>
             </span>
