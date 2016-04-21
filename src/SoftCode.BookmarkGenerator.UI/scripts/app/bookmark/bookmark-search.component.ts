@@ -50,7 +50,7 @@ import {Column} from './grid/column';
             </div>
             <div class="row top-buffer-std">
                 <div class="col-sm-12">
-                    <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (rowClicked)="getRowClicked($event)" (viewClicked)="getViewClicked($event)" (copyClicked)="onCopyClicked($event)"></grid>
+                    <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (viewClicked)="getViewClicked($event)" (copyClicked)="onCopyClicked($event)"></grid>
                 </div>
             </div>
         </div>
@@ -129,27 +129,13 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
     }
 
     search():void {
-        this.bookmarks = this._bookmarkService.getBookmarksMock(this.selectedBookmarkContext, this.searchCriteria);
-        
-        //TODO uncomment to call API
-        //this._bookmarkService.searchBookmarks(this.selectedBookmarkContext, this.searchCriteria)
-        //    .subscribe(
-        //    context => this.bookmarks = context,
-        //    error => this.errormessage = <any>error);
+
+        this._bookmarkService.searchBookmarks(this.selectedBookmarkContext, this.searchCriteria)
+            .subscribe(
+            context => this.bookmarks = context,
+            error => this.errormessage = <any>error);
     }
 
-    getRowClicked(row: Bookmark): void {
-
-
-
-
-        //this.bookmarkText = row.BookmarkCode;
-
-        //let _bookmarkOptionValue: BookmarkOptionValue = new BookmarkOptionValue();
-        //_bookmarkOptionValue.bookmarkCode = row.BookmarkCode;
-
-        //this._bookmarkChangeService.bookmarkOptionValueChangeBroadcast(_bookmarkOptionValue);
-    }
 
     onCopyClicked(row: Bookmark): void {
         let bookmark = this._bookmarkGenerationService.getBookmarkText(<BookmarkOptionValue>{ bookmarkCode: row.BookmarkCode });

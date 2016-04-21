@@ -45,11 +45,10 @@ namespace SoftCode.BookmarkGenerator.API
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
-            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()));
 
             // Doc says to add Options service in startup, but it appears to work without
             //services.AddOptions();
-
+            
             // Adding IBookmarkRepository DI
             services.AddScoped<IBookmarkRepository, BookmarkRepository>();
             // Any where that needs configuration
@@ -79,8 +78,6 @@ namespace SoftCode.BookmarkGenerator.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseCors("AllowAll");
-
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug();
             loggerFactory.AddSerilog();

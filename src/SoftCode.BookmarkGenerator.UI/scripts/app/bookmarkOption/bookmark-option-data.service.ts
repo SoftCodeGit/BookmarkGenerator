@@ -10,7 +10,7 @@ import {DbLocationService } from '../dbLocation/db-location.service';
 @Injectable()
 export class BookmarkOptionDataService {
     // TODO: move this to a CONFIG object
-    private _url: string = "http://localhost:51985/api/bookmark/BookmarkOptions/";
+    private _url: string = "http://localhost:51989/api/bookmark/BookmarkOptions/";
 
     constructor(private _dbLocationService: DbLocationService, private _http: Http) {
 
