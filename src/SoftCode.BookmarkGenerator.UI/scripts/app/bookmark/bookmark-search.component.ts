@@ -113,13 +113,10 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
 
         this.columns = this.getColumns();
 
-        this.bookmarkContexts = this._bookmarkService.getContextMock();
-
-        //TODO uncomment to call API
-        //this._bookmarkService.getReportContexts()
-        //    .subscribe(
-        //    context => this.bookmarkContexts = context,
-        //    error => this.errormessage = <any>error);
+        this._bookmarkService.getReportContexts()
+            .subscribe(
+            context => this.bookmarkContexts = context,
+            error => this.errormessage = <any>error);
     }
 
     ngOnDestroy(): void {
