@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="top-buffer-std buttom-buffer-std">
-        <button class="btn btn-primary" type="button" (click)="onChangeClicked()">Change</button>
+        <button class="btn btn-primary" type="button" (click)="onChangeClicked()"><span class="glyphicon glyphicon-edit"></span> Change</button>
     </div>
  </div>
 <div *ngIf="!isEdit">
@@ -39,8 +39,8 @@
             </div>
         </div>
         <div class="top-buffer-std buttom-buffer-std">
-            <button class="btn btn-primary" type="submit" [disabled]="!locationForm.form.valid">Save</button>
-            <button class="btn btn-warning" type="button" *ngIf="showCancelButton()" (click)="onDbLocationCancelClicked()">Cancel</button>
+            <button class="btn btn-primary" type="submit" [disabled]="!locationForm.form.valid"><span class="glyphicon glyphicon-save"></span> Save</button>
+            <button class="btn btn-warning" type="button" *ngIf="showCancelButton()" (click)="onDbLocationCancelClicked()"><span class="glyphicon glyphicon-backward"></span> Cancel</button>
         </div>
     </form>
 </div>

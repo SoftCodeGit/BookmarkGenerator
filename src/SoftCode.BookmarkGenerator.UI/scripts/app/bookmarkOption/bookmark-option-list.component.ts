@@ -12,7 +12,8 @@ import {BookmarkOptionComponent} from './bookmark-option.component';
 import {BookmarkOptionValueChangeService} from './bookmark-option-value-change.service';
 import {IBookmarkOptionValue} from './bookmark-option-value';
 import {BookmarkGenerationService} from '../bookmark/bookmark-generation.service';
-import {ClipboardCopyCommandService, IClipboardCopyCommand} from '../shared/clipboard/clipboard-command.service';
+import {ClipboardCopyCommandService, IClipboardCopyCommand, IActionStatus} from '../shared/shared';
+import {ToasterContainerComponent, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 @Component({
     selector: 'bm-form',
@@ -30,7 +31,8 @@ export class BookmarkOptionListComponent implements OnInit, OnChanges {
         private _bookmarkOptionControlService: BookmarkOptionControlService,
         private _bookmarkOptionValueChangeService: BookmarkOptionValueChangeService,
         private _bookmarkGenerationService: BookmarkGenerationService,
-        private _clipboadCopyCommandService: ClipboardCopyCommandService) {
+        private _clipboadCopyCommandService: ClipboardCopyCommandService,
+        private _toasterService: ToasterService    ) {
     }
 
     onSubmit(value: string): void{
@@ -38,15 +40,17 @@ export class BookmarkOptionListComponent implements OnInit, OnChanges {
     }
 
     onBackClicked() {
+        // reset the clipboard since we are done
+        this._clipboadCopyCommandService.copyCommandServiceCommenceCopy(<IClipboardCopyCommand>{ text: "", executeNow: false })
         // inform listener that we are done with the selection so that we can reset the state
         this._bookmarkOptionValueChangeService.bookmarkOptionValueSelectionDoneBroadcast("Done");
     }
 
     onCopyClicked() {
-        this.onFormValueChanged(this.form.value, true);
+        this.processFormValueChanged(this.form.value, true);
     }
 
-    private onFormValueChanged(value: any, copyToClipboard: boolean = false): void {
+    private processFormValueChanged(value: any, copyToClipboard: boolean = false): void {
         // TODO - put form value transformation in a service
         let keyValues = [];
         if (value) {
@@ -74,18 +78,26 @@ export class BookmarkOptionListComponent implements OnInit, OnChanges {
         this.form = this._bookmarkOptionControlService.toControlGroup(this.bookmarkOptions);
 
         // delay 1 second before calling the form's on change handler
-        this.form.valueChanges.debounceTime(1000).subscribe(form => this.onFormValueChanged(form));
+        this.form.valueChanges.debounceTime(1000).subscribe(form => this.processFormValueChanged(form));
 
         // this call just set the bookmark to the bookmark code with no options in the clipboard, it is just for display
-        this.onFormValueChanged(null);
+        this.processFormValueChanged(null);
     }
 
     private getBookmarkOptions() {
         // get list of bookmarkOptions
         this._bookmarkOptionDataService.getBookmarkOptions(this.bookmarkCode)
             .subscribe(bookmarkOptions => this.processBookmarkOptionResult(bookmarkOptions),
-            err => console.log(err),
+            err => this.processError(err),
             () => console.log("done"));
+    }
+
+    private processError(err: any): void {
+        console.log(err);
+        setTimeout(() => 
+            this._toasterService.pop("warning", "WTH!", err),
+            700);
+        this.processFormValueChanged(null);
     }
 
     // listen in on change, and only go and get the data when bookmarkCode has been populated

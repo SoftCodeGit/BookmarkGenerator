@@ -1,8 +1,8 @@
 ﻿import {Component, OnInit, OnDestroy, Input} from 'angular2/core';
 import {NgClass} from 'angular2/common';
 import {Subscription}   from 'rxjs/Subscription';
-import {IClipboardCopyCommand, IClipboadCopyStatus, ClipboardCopyCommandService} from './clipboard-command.service';
-
+import {IClipboardCopyCommand, ClipboardCopyCommandService} from './clipboard-command.service';
+import {IActionStatus} from '../shared';
 
 @Component({
     selector: 'clipboard',
@@ -57,7 +57,7 @@ export class ClipboardComponent implements OnInit, OnDestroy {
     }
 
     private statusNotification(message: string, status: string): void {
-        let statusObject: IClipboadCopyStatus;
+        let statusObject: IActionStatus;
 
         statusObject = { status: status, message: `${status} copying ${message} to the clipboard!`, title: null};
         

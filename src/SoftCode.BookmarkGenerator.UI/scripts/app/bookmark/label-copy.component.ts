@@ -4,9 +4,9 @@ import {Subscription}   from 'rxjs/Subscription';
 
 import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
 import {BookmarkOptionValueChangeService} from '../bookmarkOption/bookmark-option-value-change.service';
-import {BookmarkService} from './bookmark.service';
+import {BookmarkService} from './bookmark-data.service';
 
-
+// This component is not being used.  See clipboard component instead
 @Component({
     selector: 'label-copy',
     template: `

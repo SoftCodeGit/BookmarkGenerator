@@ -6,7 +6,7 @@ import { DbLocationService } from '../dbLocation/db-location.service';
 
 import {BookmarkContext} from './bookmark-context';
 import {Bookmark} from './bookmark';
-import {BookmarkService} from './bookmark.service';
+import {BookmarkService} from './bookmark-data.service';
 import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
 import {BookmarkOptionValueChangeService} from '../bookmarkOption/bookmark-option-value-change.service';
 import {BookmarkOptionListComponent} from '../bookmarkOption/bookmark-option-list.component';
@@ -36,33 +36,32 @@ import {Column} from './grid/column';
             <div class="row">
                 <div class="col-sm-5">
                     <h4>Bookmark Context:</h4>
-                    <my-dropdown [contexts]=bookmarkContexts (valueSelected)="displayValueSelected($event)"></my-dropdown>
+                    <my-dropdown [contexts]=bookmarkContexts (valueSelected)="displayValueSelected($event)" (change)="onBookmarkContextsChanged()"></my-dropdown>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" [hidden]="selectedBookmarkContext==null">
                 <div class="col-sm-10">
                     <h4>Search:</h4>
                     <div class="form-inline">
-                        <input [(ngModel)]="searchCriteria" placeholder="Search Criteria" class="form-control ctrl-width-sm"/>
-                        <button (click)="search()" class="btn btn-primary">Search</button>
+                        <input [(ngModel)]="searchCriteria" placeholder="Enter a search criteria, or click Search to view all" class="form-control ctrl-width-sm"/>
+                        <button (click)="search()" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Search</button>
                     </div>
                 </div>
             </div>
-            <div class="row top-buffer-std">
+            <div class="row top-buffer-std" [hidden]="bookmarks==null">
                 <div class="col-sm-12">
                     <grid name="bookmark grid" [rows]="bookmarks" [columns]="columns" (viewClicked)="getViewClicked($event)" (copyClicked)="onCopyClicked($event)"></grid>
                 </div>
             </div>
         </div>
     </div>
-    <!--<div><label-copy [bookmarkText]="bookmarkText"></label-copy></div>-->
     <div class="row top-buffer-std" *ngIf="bookmarkCode">
         <div class="col-sm-6">
             <h4>
                 Bookmark Code:
                 <span class="label label-default">{{bookmarkCode}}</span>
             </h4>
-            <bm-form [bookmarkCode]="bookmarkCode"><img src=""></bm-form>
+            <bm-form [bookmarkCode]="bookmarkCode"></bm-form>
         </div>
     </div>
 `,
@@ -81,7 +80,6 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
     errormessage: string;
 
     bookmarkCode: string;
-    private _dbLocationChanged: Subscription;
     private _bookmarkOptionValueSelectionDone: Subscription;    
 
     constructor(
@@ -93,12 +91,6 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
         
     }
 
-    private onDbLocationChanged(dbLocation: IDbLocation): void {
-        // reset items etc - but this scenario very unlikely to happen since when we change tab the component got destroyed
-        // leaving this here for now
-        console.log(JSON.stringify(dbLocation));
-    }
-
     private onOptionValueSelectionDone(message: string): void {
         this.bookmarkCode = null;
     }
@@ -106,8 +98,10 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dbLocation = this._dbLocationService.getDbLocation();
         this.message = (this.dbLocation && this.dbLocation.dbName) ? "" : "Please designate a database location first";
-        this._dbLocationChanged =
-            this._dbLocationService.dbLocationChanged$.subscribe(dbLocation => this.onDbLocationChanged(dbLocation));
+        // if no db set, no need to go further, view is already rigged not to be inserted into DOM
+        if (this.message.length > 0)
+            return;
+
         this._bookmarkOptionValueSelectionDone =
             this._bookmarkChangeService.bookmarkOptionValueSelectionDone$.subscribe(message => this.onOptionValueSelectionDone(message));
 
@@ -120,31 +114,37 @@ export class BookmarkSearchComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this._dbLocationChanged.unsubscribe();
-        this._bookmarkOptionValueSelectionDone.unsubscribe();
+        if (this._bookmarkOptionValueSelectionDone)
+            this._bookmarkOptionValueSelectionDone.unsubscribe();
     }
+
 
     displayValueSelected(ev: string):void {
         this.selectedBookmarkContext = ev;
     }
 
     search():void {
-
+        // TODO - show any error in toaster
         this._bookmarkService.searchBookmarks(this.selectedBookmarkContext, this.searchCriteria)
             .subscribe(
             context => this.bookmarks = context,
             error => this.errormessage = <any>error);
     }
 
-
+    onBookmarkContextsChanged(): void {
+        // whenever bookmark context change, reset things
+        this.searchCriteria = "";
+        this.bookmarks = null;
+    }
+    
     onCopyClicked(row: Bookmark): void {
         let bookmark = this._bookmarkGenerationService.getBookmarkText(<BookmarkOptionValue>{ bookmarkCode: row.BookmarkCode });
         this._clipboardCopyCommandService.copyCommandServiceCommenceCopy(<IClipboardCopyCommand>{ text: bookmark, executeNow: true });
     }
 
     getViewClicked(row: Bookmark):void {
-        this.bookmarkCode = row.BookmarkCode;
-        //TODO navigate or show modal               
+        // only need to set bookmarkCode to a valid value, this sets up the bookmark-option-list component
+        this.bookmarkCode = row.BookmarkCode;             
     }
 
     getColumns(): Array<Column> {

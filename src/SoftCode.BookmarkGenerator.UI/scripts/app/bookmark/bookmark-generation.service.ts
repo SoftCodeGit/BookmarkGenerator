@@ -24,7 +24,7 @@ export class BookmarkGenerationService {
                     let item: BookmarkOptionValuePair = bookmarkValue.formValues[n];
                     console.log(item);
                     //make sure value is populated
-                    if (item.value && item.value.length > 0) {
+                    if (item.value && item.value.toString().length > 0) {
 
                         if (item.key.toUpperCase() == "NUMOPTION") {
                             numOption = item.value;
@@ -33,7 +33,7 @@ export class BookmarkGenerationService {
                             if (optionalText.length > 0)
                                 optionalText += "~";
 
-                            optionalText += item.key + ":" + item.value;
+                            optionalText += item.key + ":" + (typeof(item.value) === "boolean" ? item.value.toString().toUpperCase(): item.value);
                         }
                     }
                 }

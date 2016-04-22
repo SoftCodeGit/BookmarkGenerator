@@ -12,6 +12,7 @@ var paths = {
     npm: './node_modules/',
     lib: './wwwroot/lib/',
     css: './wwwroot/css/',
+    fonts: './wwwroot/fonts/',
     toaster: './wwwroot/lib/angular2-toaster/'
 };
 
@@ -32,6 +33,10 @@ var css = [
     paths.npm + 'angular2-toaster/lib/toaster.css'
 ];
 
+var fonts = [
+    paths.npm + 'bootstrap/dist/fonts/*'
+];
+
 var toasterLib = [
 
     paths.npm + 'angular2-toaster/lib/bodyOutputType.js',
@@ -48,6 +53,10 @@ var toasterSrc = [
 gulp.task('css', function () {
     return gulp.src(css).pipe(gulp.dest(paths.css));
 });
+
+gulp.task('fonts', function () {
+    return gulp.src(fonts).pipe(gulp.dest(paths.fonts));
+})
 
 // the entire content under rxjs folder is needed
 gulp.task('rxjs', function () {
@@ -67,7 +76,7 @@ gulp.task('toaster', function () {
 
 // copy everything to libs folder
 // we will bind this task so that files are copied after every build
-gulp.task('libs', ['rxjs', 'css', 'toaster'], function () {
+gulp.task('libs', ['rxjs', 'css', 'toaster', 'fonts'], function () {
     return gulp.src(libs).pipe(gulp.dest(paths.lib));
 });
 

@@ -7,7 +7,9 @@ export class BookmarkOptionValueChangeService {
     private _bookmarkOptionValueChangedSource = new Subject<IBookmarkOptionValue>();
     private _bookmarkOptionValueSelectionDoneSource = new Subject<string>();
 
+    // Do we need this?  We changed to an approach where we send a command to the clipboard directly
     bookmarkOptionValueChanged$ = this._bookmarkOptionValueChangedSource.asObservable();
+    // We do need this to inform components that user is done with option selections
     bookmarkOptionValueSelectionDone$ = this._bookmarkOptionValueSelectionDoneSource.asObservable();
 
     // Fire this guy when the form values changed

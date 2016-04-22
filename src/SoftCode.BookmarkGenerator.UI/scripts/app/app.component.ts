@@ -2,6 +2,7 @@
 import {HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/Rx';
 import { RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router';
+import {ToasterContainerComponent, ToasterService} from 'angular2-toaster/angular2-toaster';
 
 import { DbLocationService } from './dbLocation/db-location.service';
 import { DbLocationFormsComponent } from './dbLocation/db-location-forms.component';
@@ -18,6 +19,7 @@ import {IDbLocation, IClipboardCopyCommand, ClipboardCopyCommandService, ToastCo
         , HTTP_PROVIDERS
         , ClipboardCopyCommandService
         , LoadingIconService
+        , ToasterService
     ]
 })
 

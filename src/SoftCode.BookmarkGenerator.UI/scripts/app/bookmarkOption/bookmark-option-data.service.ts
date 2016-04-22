@@ -111,6 +111,9 @@ export class BookmarkOptionDataService {
     };
 
     getBookmarkOptions(bookMarkCode: string): Observable<BookmarkOptionBase<any>[]> {
+        if (CONFIG.useMock)
+            return this.getBookmarkOptionsMock(null);
+
         this._loadingIconService.show();
         let db = this._dbLocationService.getDbLocation();
         let headers = new Headers({ "Content-Type": "application/json" });
@@ -156,7 +159,7 @@ export class BookmarkOptionDataService {
     }
 
     private handleError(error: any): any {
-        let errMsg = error.message || 'Server error';
+        let errMsg = error.message || error.text() || 'Server error';
         // TODO - log err to server
         console.error(errMsg); // log to console instead
         return Observable.throw(errMsg);

@@ -8,33 +8,36 @@ import {BookmarkOptionValuePair} from '../bookmarkOption/bookmark-option-value';
 import {DbLocationService} from '../dbLocation/db-location.service';
 
 import {CONTEXTS, BOOKMARKS}     from './bookmark.service.mock';
+import {LoadingIconService, CONFIG} from '../shared/shared';
 
 @Injectable() 
 export class BookmarkService {
-    constructor(private http: Http, private _DbLocationService: DbLocationService) { }
+    constructor(private http: Http, private _DbLocationService: DbLocationService, private _loadingIconService: LoadingIconService) { }
 
-    private _Url = 'http://localhost:51989/api/Bookmark/';  // URL to web api
-
-
+    private _Url = CONFIG.baseUrls.bookmark;  // URL to web api
 
     getContextMock() {
         return CONTEXTS;
     }
 
     getReportContexts() {
+        this._loadingIconService.show();
         return this.http.get(this._Url + "BookmarkReportContext?" + this._DbLocationService.getDbQueryString())
             .map(res => <BookmarkContext[]>res.json())
             .do(data => console.log(data))
-            .catch(this.handleError);
+            .catch(this.handleError)
+            .finally(() => this._loadingIconService.hide());
+
     }
 
     searchBookmarks(reportContextCode: string, searchCriteria: string) {
         var _url: string = this._Url + "SearchBookmarks?" + this._DbLocationService.getDbQueryString() + "&reportContextCode=" + reportContextCode + "&searchCriteria=" + searchCriteria;
-
+        this._loadingIconService.show();
         return this.http.get(_url, [])
             .map(res => <Bookmark[]>res.json())
             .do(data => console.log(data))
-            .catch(this.handleError);
+            .catch(this.handleError)
+            .finally(() => this._loadingIconService.hide());
     }
 
     getBookmarksMock(reportContextCode: string, searchCriteria: string) {
@@ -48,52 +51,5 @@ export class BookmarkService {
         console.error(error);
         return Observable.throw(error.json().error || 'Server error');
     }
-
-
-    getBookmarkText(bookmarkValue: BookmarkOptionValue): string {
-        let output: string = "";
-
-        if (bookmarkValue && bookmarkValue.bookmarkCode) {
-            output = "<" + bookmarkValue.bookmarkCode;
-            
-            //build syntax based optional form values 
-            if (bookmarkValue.formValues) {
-
-                let optionalText: string = "";
-                let numOption: string = "";
-
-                for (var n = 0; n < bookmarkValue.formValues.length; n++) {
-
-                    let item: BookmarkOptionValuePair = bookmarkValue.formValues[n];
-
-                    //make sure value is populated
-                    if (item.value && item.value.length > 0) {
-
-                        if (item.key.toUpperCase() == "NUMOPTION") {
-                            numOption = item.value;
-                        }
-                        else {
-                            if (optionalText.length > 0)
-                                optionalText += "~";
-
-                            optionalText += item.key + ":" + item.value;
-                        }
-                    }
-                }
-
-                if (numOption.length > 0)
-                    output += "_NUM:" + numOption;
-
-                if (optionalText.length > 0)
-                    output += "_OPT_" + optionalText;
-            }
-
-            output += ">";
-        }
-
-
-        return output;
-    }
-
 
 }

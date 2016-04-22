@@ -65,7 +65,7 @@ namespace SoftCode.BookmarkGenerator.API.Controllers
                     bookmarkOptions = _bookmarkRepository.GetBookBookmarkOptionsByBookmarkCode(bookmarkCode);
                     if (bookmarkOptions == null)
                     {
-                        return HttpNotFound();
+                        return HttpNotFound(string.Format("Unable to locate values for {0}", bookmarkCode));
                     }
 
                     return new JsonResult(_bookmarkValueMapper.CreateBookmarkOptionViewModel(bookmarkOptions), 

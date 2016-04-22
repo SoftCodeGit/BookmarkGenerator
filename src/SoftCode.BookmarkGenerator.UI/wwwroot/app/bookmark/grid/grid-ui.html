@@ -7,12 +7,12 @@
     </thead>
     <tr *ngFor="#row of rows" (click)="onRowClicked(row)">
         <!--<td><label-copy [bookmarkText]="row.BookmarkCode" [hide]="true"></label-copy></td>-->
-        <td><button class="btn btn-default" (click)="onCopyClicked(row)">Copy</button></td>
+        <td><button class="btn btn-default" (click)="onCopyClicked(row)"><span class="glyphicon glyphicon-copy"></span> Copy</button></td>
         <td *ngFor="#col of columns">
             <span [ngSwitch]="col.name">
                 <span *ngSwitchWhen="'HasBookmarkOptions'">
-                    <button *ngIf="row[col.name]" (click)="onViewClicked(row)" class="btn btn-default">View</button>
-                </span>
+                    <button *ngIf="row[col.name]" (click)="onViewClicked(row)" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> View</button>
+                </span> 
                 <span *ngSwitchDefault>{{row[col.name]}}</span>
             </span>
         </td>

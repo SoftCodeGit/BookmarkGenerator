@@ -1,13 +1,15 @@
 ﻿import {Component, OnInit, OnDestroy} from 'angular2/core';
 import {Subscription}   from 'rxjs/Subscription';
 import {ToasterContainerComponent, ToasterService} from 'angular2-toaster/angular2-toaster';
-import {IClipboadCopyStatus, ClipboardCopyCommandService} from '../clipboard/clipboard-command.service';
+import {ClipboardCopyCommandService} from '../clipboard/clipboard-command.service';
+import {IActionStatus} from '../shared';
 
+// So this is a component mostly for clipboard copying
+// You can just invoke a toast else where by calling ToasterService.pop();
 @Component({
     selector: "toast",
     template: "<toaster-container ></toaster-container>",
-    directives: [ToasterContainerComponent],
-    providers: [ToasterService]
+    directives: [ToasterContainerComponent]
 })
 export class ToastComponent implements OnInit, OnDestroy  {
     private _clipboardCopyStatus: Subscription
@@ -15,7 +17,7 @@ export class ToastComponent implements OnInit, OnDestroy  {
     constructor(private _toasterService: ToasterService, private _clipboardCopyService: ClipboardCopyCommandService) {
     }
 
-    private processClipboadCopyStatus(status: IClipboadCopyStatus): void {
+    private processToastRequest(status: IActionStatus): void {
         
         switch (status.status) {
             case "success":
@@ -34,7 +36,7 @@ export class ToastComponent implements OnInit, OnDestroy  {
     }
 
     ngOnInit(): void {
-        this._clipboardCopyStatus = this._clipboardCopyService.copyStatusNotify$.subscribe(status => this.processClipboadCopyStatus(status));
+        this._clipboardCopyStatus = this._clipboardCopyService.copyStatusNotify$.subscribe(status => this.processToastRequest(status));
     }
 
     ngOnDestroy(): void {
