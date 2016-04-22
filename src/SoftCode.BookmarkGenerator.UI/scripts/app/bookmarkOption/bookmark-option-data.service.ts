@@ -6,13 +6,16 @@ import {DropdownBookmarkOption} from './bookmark-option-dropdown';
 import {TextboxBookmarkOption} from './bookmark-option-textbox';
 import {CheckboxBookmarkOption} from './bookmark-option-checkbox';
 import {DbLocationService } from '../dbLocation/db-location.service';
+import {LoadingIconService, CONFIG} from '../shared/shared';
 
 @Injectable()
 export class BookmarkOptionDataService {
     // TODO: move this to a CONFIG object
-    private _url: string = "http://localhost:51985/api/bookmark/BookmarkOptions/";
+    private _url: string = CONFIG.baseUrls.bookmarkOptions;// "http://localhost:51985/api/bookmark/BookmarkOptions/";
 
-    constructor(private _dbLocationService: DbLocationService, private _http: Http) {
+    constructor(private _dbLocationService: DbLocationService,
+        private _http: Http,
+        private _loadingIconService: LoadingIconService) {
 
     }
     
@@ -108,7 +111,7 @@ export class BookmarkOptionDataService {
     };
 
     getBookmarkOptions(bookMarkCode: string): Observable<BookmarkOptionBase<any>[]> {
-
+        this._loadingIconService.show();
         let db = this._dbLocationService.getDbLocation();
         let headers = new Headers({ "Content-Type": "application/json" });
         let options = new RequestOptions({ headers: headers });
@@ -116,7 +119,8 @@ export class BookmarkOptionDataService {
 
         return this._http.get(url)
             .map(this.transformData)
-            .catch(this.handleError);
+            .catch(this.handleError)
+            .finally(() => this._loadingIconService.hide());
 
     }
 

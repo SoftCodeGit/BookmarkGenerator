@@ -3,26 +3,21 @@ import {HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/Rx';
 import { RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router';
 
-import { IDbLocation } from './shared/dbLocation/db-location';
 import { DbLocationService } from './dbLocation/db-location.service';
 import { DbLocationFormsComponent } from './dbLocation/db-location-forms.component';
 import { BookmarkSearchComponent} from './bookmark/bookmark-search.component';
-import {IClipboardCopyCommand, ClipboardCopyCommandService} from './shared/clipboard/clipboard-command.service';
 
-import {ToastComponent} from './shared/toast/toast.component';
+import {IDbLocation, IClipboardCopyCommand, ClipboardCopyCommandService, ToastComponent, LoadingIconComponent, LoadingIconService} from './shared/shared';
 
 @Component({
     selector: 'bm-app',
     templateUrl: 'app/app.component.html',
-    directives: [ROUTER_DIRECTIVES, ToastComponent],
-    //TODO: uncomment registering of services when they are available
+    directives: [ROUTER_DIRECTIVES, ToastComponent, LoadingIconComponent],
     providers: [
         DbLocationService
         , HTTP_PROVIDERS
         , ClipboardCopyCommandService
-        //, BookmarkOptionDataService
-        //, BookmarkOptionControlService
-        //, BookmarkOptionValueChangeService
+        , LoadingIconService
     ]
 })
 
@@ -43,7 +38,6 @@ export class AppComponent implements OnInit {
     }
     
     private onDbLocationChanged(dbLocation: IDbLocation): void {
-        //console.log("From app.Component: " + JSON.stringify(dbLocation));
         this._router.navigate(['Bookmark']);
     }
 
