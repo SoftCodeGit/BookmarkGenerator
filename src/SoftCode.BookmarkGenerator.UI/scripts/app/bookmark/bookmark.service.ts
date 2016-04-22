@@ -5,14 +5,15 @@ import {BookmarkContext}     from './bookmark-context';
 import {Bookmark} from './bookmark';
 import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
 import {BookmarkOptionValuePair} from '../bookmarkOption/bookmark-option-value';
+import {DbLocationService} from '../dbLocation/db-location.service';
 
 import {CONTEXTS, BOOKMARKS}     from './bookmark.service.mock';
 
 @Injectable() 
 export class BookmarkService {
-    constructor(private http: Http) { }
+    constructor(private http: Http, private _DbLocationService: DbLocationService) { }
 
-    private _Url = 'http://localhost:55250/Bookmark/';  // URL to web api
+    private _Url = 'http://localhost:51989/api/Bookmark/';  // URL to web api
 
 
 
@@ -21,14 +22,14 @@ export class BookmarkService {
     }
 
     getReportContexts() {
-        return this.http.get(this._Url + "GetBookmarkContextList")
+        return this.http.get(this._Url + "BookmarkReportContext?" + this._DbLocationService.getDbQueryString())
             .map(res => <BookmarkContext[]>res.json())
             .do(data => console.log(data))
             .catch(this.handleError);
     }
 
     searchBookmarks(reportContextCode: string, searchCriteria: string) {
-        var _url: string = this._Url + "SearchBookmarks?reportContextCode=" + reportContextCode + "&searchCriteria=" + searchCriteria;
+        var _url: string = this._Url + "SearchBookmarks?" + this._DbLocationService.getDbQueryString() + "&reportContextCode=" + reportContextCode + "&searchCriteria=" + searchCriteria;
 
         return this.http.get(_url, [])
             .map(res => <Bookmark[]>res.json())
