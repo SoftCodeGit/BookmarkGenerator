@@ -74,13 +74,22 @@ gulp.task('toaster', function () {
     return merge(src, libs);
 });
 
-// copy everything to libs folder
+//copies all files that end in mock.json
+gulp.task('mock', function () {
+    gulp.src('scripts/app/**/*mock.json').pipe(gulp.dest('./wwwroot/app'));
+});
+
+
 // we will bind this task so that files are copied after every build
-gulp.task('libs', ['rxjs', 'css', 'toaster', 'fonts'], function () {
+gulp.task('libs', ['rxjs', 'css', 'toaster', 'fonts', 'mock'], function () {
     return gulp.src(libs).pipe(gulp.dest(paths.lib));
 });
+
+
 
 // define a clean up task, we will hook it up to VS's clean event
 gulp.task('clean', function (callback) {
     rimraf(paths.lib, callback);
 });
+
+

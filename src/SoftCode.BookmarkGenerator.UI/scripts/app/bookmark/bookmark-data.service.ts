@@ -15,6 +15,7 @@ export class BookmarkService {
     constructor(private http: Http, private _DbLocationService: DbLocationService, private _loadingIconService: LoadingIconService) { }
 
     private _Url = CONFIG.baseUrls.bookmark;  // URL to web api
+    
 
     getContextMock() {
         return CONTEXTS;
@@ -22,12 +23,16 @@ export class BookmarkService {
 
     getReportContexts() {
         this._loadingIconService.show();
-        return this.http.get(this._Url + "BookmarkReportContext?" + this._DbLocationService.getDbQueryString())
+        let reportContextUrl = this._Url + "BookmarkReportContext?" + this._DbLocationService.getDbQueryString();
+
+        if (CONFIG.useMock)
+            reportContextUrl = "app/bookmark/bookmark-context-mock.json";
+
+        return this.http.get(reportContextUrl)
             .map(res => <BookmarkContext[]>res.json())
             .do(data => console.log(data))
             .catch(this.handleError)
             .finally(() => this._loadingIconService.hide());
-
     }
 
     searchBookmarks(reportContextCode: string, searchCriteria: string) {

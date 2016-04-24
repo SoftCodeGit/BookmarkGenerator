@@ -11,8 +11,8 @@ namespace SoftCode.BookmarkGenerator.Common.DTO
 
         public string ReportContextDesc { get; set; }
 
-        public string ReportContextParam { get; set; }
+        //public string ReportContextParam { get; set; }
 
-        public bool IsCustom { get; set; }
+        //public bool IsCustom { get; set; }
     }
 }
