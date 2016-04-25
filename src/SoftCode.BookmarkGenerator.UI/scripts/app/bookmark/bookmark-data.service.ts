@@ -1,6 +1,9 @@
 ﻿import {Injectable} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
-import {Observable}     from 'rxjs/Observable';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from "rxjs/Subject";
+import {BehaviorSubject} from "rxjs/Rx";
+
 import {BookmarkContext}     from './bookmark-context';
 import {Bookmark} from './bookmark';
 import {BookmarkOptionValue} from '../bookmarkOption/bookmark-option-value';
@@ -16,11 +19,6 @@ export class BookmarkService {
 
     private _Url = CONFIG.baseUrls.bookmark;  // URL to web api
     
-
-    getContextMock() {
-        return CONTEXTS;
-    }
-
     getReportContexts() {
         this._loadingIconService.show();
         let reportContextUrl = this._Url + "BookmarkReportContext?" + this._DbLocationService.getDbQueryString();
@@ -38,15 +36,26 @@ export class BookmarkService {
     searchBookmarks(reportContextCode: string, searchCriteria: string) {
         var _url: string = this._Url + "SearchBookmarks?" + this._DbLocationService.getDbQueryString() + "&reportContextCode=" + reportContextCode + "&searchCriteria=" + searchCriteria;
         this._loadingIconService.show();
-        return this.http.get(_url, [])
-            .map(res => <Bookmark[]>res.json())
-            .do(data => console.log(data))
-            .catch(this.handleError)
-            .finally(() => this._loadingIconService.hide());
-    }
 
-    getBookmarksMock(reportContextCode: string, searchCriteria: string) {
-        return BOOKMARKS;
+        //this mock will create a new observable
+        if (CONFIG.useMock) {
+
+            let _subject: BehaviorSubject<Array<Bookmark>> = new BehaviorSubject(BOOKMARKS);
+            let _searchObservableMock: Observable<Array<Bookmark>> = _subject;
+
+            this._loadingIconService.hide()
+
+            return _searchObservableMock
+                .catch(this.handleError)
+                .finally(() => this._loadingIconService.hide()); //not sure why this isn't working            
+        }
+        else {
+            return this.http.get(_url, [])
+                .map(res => <Bookmark[]>res.json())
+                .do(data => console.log(data))
+                .catch(this.handleError)
+                .finally(() => this._loadingIconService.hide());
+        }
     }
 
 
