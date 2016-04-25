@@ -81,6 +81,7 @@ export class BookmarkOptionDataService {
             new DropdownBookmarkOption({
                 key: 'IB',
                 label: 'IB',
+                description: 'Interest Bearing', 
                 dropdownOptions: [
                     { key: 'P', value: 'P' },
                     { key: 'I', value: 'I' }
