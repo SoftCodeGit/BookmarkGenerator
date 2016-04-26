@@ -1,0 +1,9 @@
+﻿{
+  "buildEnv": "dev",
+  "envFileMap": {
+    "dev": "'./config-dev'",
+    "prod": "'./config-prod'",
+    "qa": "'./config-qa'"
+  },
+  "preFix": "export * from "
+}
