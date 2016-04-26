@@ -1,5 +1,5 @@
 ﻿//TO-DO: use the actual domain name
-var domain = "http://denali:86/";
+var domain = "denali:86/";
 export let CONFIG = {
     baseUrls: {
         bookmarkOptions: `http://${domain}/api/bookmark/BookmarkOptions/`,
