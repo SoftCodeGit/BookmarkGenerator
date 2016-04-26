@@ -11,6 +11,8 @@ namespace SoftCode.BookmarkGenerator.API.ViewModels
 
         public string Label { get; set; }
 
+        public string Description { get; set; }
+
         public bool Required { get; set; }
 
         public int Order { get; set; }

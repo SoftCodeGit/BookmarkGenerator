@@ -56,7 +56,8 @@ namespace SoftCode.BookmarkGenerator.API.ViewModelHelpers
                     {
                         ControlType = ControlTypeMap[bookmarkOption.DisplayType],
                         Key = bookmarkOption.BookmarkOptionNumber,
-                        Label = bookmarkOption.BookmarkOptionNumber
+                        Label = bookmarkOption.BookmarkOptionNumber,    
+                        Description = bookmarkOption.BookmarkOptionDesc                   
                     };
                     var list = new List<KeyValuePair<string, string>>();
                     bookmarkOption.BookmarkValueList.ForEach(
@@ -74,7 +75,8 @@ namespace SoftCode.BookmarkGenerator.API.ViewModelHelpers
                         ControlType = ControlTypeMap[bookmarkOption.DisplayType],
                         Key = bookmarkOption.BookmarkOptionNumber,
                         Label = bookmarkOption.BookmarkOptionNumber,
-                        Value = bookmarkOption.BookmarkValueList[0].BookmarkOptionValue
+                        Value = bookmarkOption.BookmarkValueList[0].BookmarkOptionValue,
+                        Description = bookmarkOption.BookmarkOptionDesc
                     };
                     break;
                 case "checkbox":
@@ -82,7 +84,8 @@ namespace SoftCode.BookmarkGenerator.API.ViewModelHelpers
                     {
                         ControlType = ControlTypeMap[bookmarkOption.DisplayType],
                         Key = bookmarkOption.BookmarkOptionNumber,
-                        Label = bookmarkOption.BookmarkOptionNumber
+                        Label = bookmarkOption.BookmarkOptionNumber,
+                        Description = bookmarkOption.BookmarkOptionDesc
                     };
                     break;
                 

@@ -1,5 +1,8 @@
 ﻿<div [ngFormModel] ="form" class="form-group">
     <label [attr.for]="bookmarkOption.key">{{bookmarkOption.label}}</label>
+    <small [attr.for]="bookmarkOption.key" class="text-muted"> {{bookmarkOption.description}}</small>
+
+
 
     <div [ngSwitch] ="bookmarkOption.controlType" class="form-inline">
 
