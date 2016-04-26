@@ -1,1 +1,1 @@
-export * from './config-dev';
+export * from './config-qa';
