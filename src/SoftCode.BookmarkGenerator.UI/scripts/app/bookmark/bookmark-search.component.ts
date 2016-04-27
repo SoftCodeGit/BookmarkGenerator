@@ -43,7 +43,7 @@ import {Column} from './grid/column';
                 <div class="col-sm-10">
                     <h4>Search:</h4>
                     <div class="form-inline">
-                        <input [(ngModel)]="searchCriteria" placeholder="Enter a search criteria, or click Search to view all" class="form-control ctrl-width-sm"/>
+                        <input [(ngModel)]="searchCriteria" (keyup.enter)="search()" placeholder="Enter a search criteria, or click Search to view all" class="form-control ctrl-width-sm"/>
                         <button (click)="search()" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Search</button>
                     </div>
                 </div>
