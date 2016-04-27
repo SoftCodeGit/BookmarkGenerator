@@ -1,5 +1,4 @@
 ﻿{
-  "buildEnv": "dev",
   "envFileMap": {
     "dev": "'./config-dev'",
     "prod": "'./config-prod'",
