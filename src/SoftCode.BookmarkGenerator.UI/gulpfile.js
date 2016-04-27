@@ -8,7 +8,8 @@ var merge = require('merge-stream');
 // helper to facilitate the 'clean' task
 var rimraf = require('rimraf');
 // needed for running the config task
-var envConfigSettings = require('./envConfig.json');
+var env = require('./env-set-dont-checkin.json');
+var envConfigSettings = require('./env-config.json');
 var fs = require('fs');
 
 var paths = {
@@ -91,7 +92,7 @@ gulp.task('libs', ['rxjs', 'css', 'toaster', 'fonts', 'mock'], function () {
 // define a config task, this will change the export statement in config.ts in accordance to envConfig.json
 // we'll need to run this task before the build
 gulp.task('config', function (cb) {
-    var content = envConfigSettings.preFix + envConfigSettings.envFileMap[envConfigSettings.buildEnv] + ";";
+    var content = envConfigSettings.preFix + envConfigSettings.envFileMap[env.buildEnv] + ";";
     console.log(content);
     fs.writeFile('./scripts/app/shared/config/config.ts', content, cb)
 });
